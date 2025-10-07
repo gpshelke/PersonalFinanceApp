@@ -12,27 +12,143 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-secondary: white;
+            --text-primary: #2c3e50;
+            --text-secondary: white;
+            --card-bg: white;
+            --modal-bg: white;
+            --input-bg: white;
+            --border-color: #bdc3c7;
+            --shadow: rgba(0,0,0,0.3);
+        }
+        
+        .dark-mode {
+            --bg-primary: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ecf0f1;
+            --text-secondary: #ecf0f1;
+            --card-bg: #2c3e50;
+            --modal-bg: #34495e;
+            --input-bg: #2c3e50;
+            --border-color: #4a5f7a;
+            --shadow: rgba(0,0,0,0.6);
+        }
+        
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
             padding: 10px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-box {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-box h2 {
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .login-input {
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .login-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            background: #2980b9;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        /* Main App Styles */
+        .app-container {
+            display: none;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-secondary);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px var(--shadow);
             overflow: hidden;
         }
         
         .header {
             background: #2c3e50;
-            color: white;
+            color: var(--text-secondary);
             padding: 15px;
             text-align: center;
+            position: relative;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.3);
         }
         
         .header h1 {
@@ -103,15 +219,16 @@
         }
         
         .balance-card {
-            background: white;
+            background: var(--card-bg);
             padding: 12px;
             border-radius: 8px;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px var(--shadow);
             min-height: 80px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            color: var(--text-primary);
         }
         
         .balance-card h3 {
@@ -124,15 +241,15 @@
         .balance-card .amount {
             font-size: 16px;
             font-weight: bold;
-            color: #2c3e50;
+            color: var(--text-primary);
             word-break: break-all;
         }
         
         .chart-container {
-            background: white;
+            background: var(--card-bg);
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px var(--shadow);
             height: 280px;
             min-height: 280px;
             position: relative;
@@ -140,7 +257,7 @@
         
         .chart-title {
             text-align: center;
-            color: #2c3e50;
+            color: var(--text-primary);
             margin-bottom: 15px;
             font-weight: bold;
             font-size: 1.1rem;
@@ -198,16 +315,17 @@
         }
         
         .modal-content {
-            background: white;
+            background: var(--modal-bg);
             padding: 20px;
             border-radius: 12px;
             width: 100%;
             max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px var(--shadow);
             margin-top: 20px;
             margin-bottom: 20px;
+            color: var(--text-primary);
         }
         
         .form-group {
@@ -217,7 +335,7 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            color: #2c3e50;
+            color: var(--text-primary);
             font-weight: bold;
             font-size: 14px;
         }
@@ -225,10 +343,12 @@
         .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #bdc3c7;
+            border: 2px solid var(--border-color);
             border-radius: 5px;
             font-size: 16px;
             min-height: 44px;
+            background: var(--input-bg);
+            color: var(--text-primary);
         }
         
         .transaction-list {
@@ -239,7 +359,7 @@
         
         .transaction-item {
             padding: 10px;
-            border-bottom: 1px solid #ecf0f1;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -304,7 +424,7 @@
             flex: 1;
             padding: 10px;
             border: 2px solid #3498db;
-            background: white;
+            background: var(--input-bg);
             color: #3498db;
             border-radius: 5px;
             cursor: pointer;
@@ -384,6 +504,21 @@
             color: #7f8c8d;
             padding: 40px;
             font-style: italic;
+        }
+
+        /* Footer Styles */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 20px;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .footer p {
+            font-size: 14px;
+            opacity: 0.8;
         }
 
         /* Mobile-specific improvements */
@@ -479,6 +614,10 @@
             .repay-option-btn, .fd-option-btn, .investment-option-btn {
                 width: 100%;
             }
+            
+            .login-box {
+                padding: 30px 20px;
+            }
         }
 
         /* Very small screens */
@@ -495,278 +634,366 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>💰 Finance Manager</h1>
-            <p>Manage your money smartly</p>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <h2>🔐 Finance Manager Login</h2>
+            <form class="login-form" id="loginForm">
+                <input type="text" class="login-input" id="username" placeholder="Username" required>
+                <input type="password" class="login-input" id="password" placeholder="Password" required>
+                <button type="submit" class="login-btn">Login</button>
+                <div class="error-message" id="errorMessage">Invalid username or password!</div>
+            </form>
         </div>
-        
-        <div class="data-management">
-            <button class="data-btn" onclick="exportData()">📥 Export Data</button>
-            <button class="data-btn import" onclick="importData()">📤 Import Data</button>
-            <button class="data-btn clear" onclick="clearAllData()">🗑️ Clear Data</button>
-        </div>
-        
-        <div class="dashboard">
-            <div class="balances">
-                <div class="balance-card">
-                    <h3>Available Balance</h3>
-                    <div class="amount" id="availableBalance">₹0.00</div>
+    </div>
+
+    <!-- Main App (Hidden until login) -->
+    <div class="app-container" id="appContainer">
+        <div class="container">
+            <div class="header">
+                <button class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
+                <h1>💰 Finance Manager</h1>
+                <p>Manage your money smartly</p>
+            </div>
+            
+            <div class="data-management">
+                <button class="data-btn" onclick="exportData()">📥 Export Data</button>
+                <button class="data-btn import" onclick="importData()">📤 Import Data</button>
+                <button class="data-btn clear" onclick="clearAllData()">🗑️ Clear Data</button>
+            </div>
+            
+            <div class="dashboard">
+                <div class="balances">
+                    <div class="balance-card">
+                        <h3>Available Balance</h3>
+                        <div class="amount" id="availableBalance">₹0.00</div>
+                    </div>
+                    <div class="balance-card">
+                        <h3>Family Balance</h3>
+                        <div class="amount" id="familyBalance">₹0.00</div>
+                    </div>
+                    <div class="balance-card">
+                        <h3>Repay Amount</h3>
+                        <div class="amount" id="repayAmount">₹0.00</div>
+                    </div>
+                    <div class="balance-card">
+                        <h3>Rent Balance</h3>
+                        <div class="amount" id="rentBalance">₹0.00</div>
+                    </div>
+                    <div class="balance-card">
+                        <h3>Miscellaneous</h3>
+                        <div class="amount" id="miscBalance">₹0.00</div>
+                    </div>
+                    <div class="balance-card">
+                        <h3>Fixed Deposit</h3>
+                        <div class="amount" id="fdBalance">₹0.00</div>
+                    </div>
+                    <div class="balance-card">
+                        <h3>Investments</h3>
+                        <div class="amount" id="investmentBalance">₹0.00</div>
+                    </div>
                 </div>
-                <div class="balance-card">
-                    <h3>Family Balance</h3>
-                    <div class="amount" id="familyBalance">₹0.00</div>
-                </div>
-                <div class="balance-card">
-                    <h3>Repay Amount</h3>
-                    <div class="amount" id="repayAmount">₹0.00</div>
-                </div>
-                <div class="balance-card">
-                    <h3>Rent Balance</h3>
-                    <div class="amount" id="rentBalance">₹0.00</div>
-                </div>
-                <div class="balance-card">
-                    <h3>Miscellaneous</h3>
-                    <div class="amount" id="miscBalance">₹0.00</div>
-                </div>
-                <div class="balance-card">
-                    <h3>Fixed Deposit</h3>
-                    <div class="amount" id="fdBalance">₹0.00</div>
-                </div>
-                <div class="balance-card">
-                    <h3>Investments</h3>
-                    <div class="amount" id="investmentBalance">₹0.00</div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">Money Distribution</div>
+                    <canvas id="financeChart"></canvas>
                 </div>
             </div>
             
-            <div class="chart-container">
-                <div class="chart-title">Money Distribution</div>
-                <canvas id="financeChart"></canvas>
+            <div class="menu">
+                <button class="menu-btn" onclick="showModal('addBalanceModal')">Add Balance</button>
+                <button class="menu-btn" onclick="showModal('familyModal')">Send to Family</button>
+                <button class="menu-btn" onclick="showModal('repayModal')">Repay Management</button>
+                <button class="menu-btn" onclick="showModal('rentModal')">Pay Rent</button>
+                <button class="menu-btn" onclick="showModal('miscModal')">Miscellaneous</button>
+                <button class="menu-btn" onclick="showModal('fdModal')" style="background: #16a085;">Fixed Deposit</button>
+                <button class="menu-btn" onclick="showModal('investmentModal')" style="background: #8e44ad;">Investments</button>
+                <button class="menu-btn" onclick="showHistory()">Transaction History</button>
             </div>
-        </div>
-        
-        <div class="menu">
-            <button class="menu-btn" onclick="showModal('addBalanceModal')">Add Balance</button>
-            <button class="menu-btn" onclick="showModal('familyModal')">Send to Family</button>
-            <button class="menu-btn" onclick="showModal('repayModal')">Repay Management</button>
-            <button class="menu-btn" onclick="showModal('rentModal')">Pay Rent</button>
-            <button class="menu-btn" onclick="showModal('miscModal')">Miscellaneous</button>
-            <button class="menu-btn" onclick="showModal('fdModal')" style="background: #16a085;">Fixed Deposit</button>
-            <button class="menu-btn" onclick="showModal('investmentModal')" style="background: #8e44ad;">Investments</button>
-            <button class="menu-btn" onclick="showHistory()">Transaction History</button>
-        </div>
-    </div>
 
-    <!-- Add Balance Modal -->
-    <div class="modal" id="addBalanceModal">
-        <div class="modal-content">
-            <h2>Add Available Balance</h2>
-            <div class="form-group">
-                <label>Amount (₹):</label>
-                <input type="number" id="addAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
-            </div>
-            <div class="btn-group">
-                <button class="btn-primary" onclick="addBalance()">Add Balance</button>
-                <button class="btn-danger" onclick="hideModal('addBalanceModal')">Cancel</button>
+            <!-- Footer -->
+            <div class="footer">
+                <p>&copy; 2024 GopalShelke. All rights reserved.</p>
             </div>
         </div>
-    </div>
 
-    <!-- Send to Family Modal -->
-    <div class="modal" id="familyModal">
-        <div class="modal-content">
-            <h2>Send to Family</h2>
-            <div class="form-group">
-                <label>Amount (₹):</label>
-                <input type="number" id="familyAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
-            </div>
-            <div class="btn-group">
-                <button class="btn-primary" onclick="sendToFamily()">Send</button>
-                <button class="btn-danger" onclick="hideModal('familyModal')">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Repay Management Modal -->
-    <div class="modal" id="repayModal">
-        <div class="modal-content">
-            <h2>Repay Amount Management</h2>
-            <div class="repay-options">
-                <button class="repay-option-btn active" onclick="showRepayOption('repay')">Repay Loan</button>
-                <button class="repay-option-btn" onclick="showRepayOption('borrow')">Borrow New</button>
-            </div>
-            
-            <div id="repaySection">
+        <!-- All your existing modals remain the same -->
+        <!-- Add Balance Modal -->
+        <div class="modal" id="addBalanceModal">
+            <div class="modal-content">
+                <h2>Add Available Balance</h2>
                 <div class="form-group">
-                    <label>Amount to Repay (₹):</label>
-                    <input type="number" id="repayAmountInput" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    <label>Amount (₹):</label>
+                    <input type="number" id="addAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
                 </div>
                 <div class="btn-group">
-                    <button class="btn-success" onclick="repayLoan()">Repay</button>
-                    <button class="btn-danger" onclick="hideModal('repayModal')">Cancel</button>
+                    <button class="btn-primary" onclick="addBalance()">Add Balance</button>
+                    <button class="btn-danger" onclick="hideModal('addBalanceModal')">Cancel</button>
                 </div>
             </div>
-            
-            <div id="borrowSection" style="display: none;">
+        </div>
+
+        <!-- Send to Family Modal -->
+        <div class="modal" id="familyModal">
+            <div class="modal-content">
+                <h2>Send to Family</h2>
                 <div class="form-group">
-                    <label>New Loan Amount (₹):</label>
-                    <input type="number" id="borrowAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    <label>Amount (₹):</label>
+                    <input type="number" id="familyAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="sendToFamily()">Send</button>
+                    <button class="btn-danger" onclick="hideModal('familyModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Repay Management Modal -->
+        <div class="modal" id="repayModal">
+            <div class="modal-content">
+                <h2>Repay Amount Management</h2>
+                <div class="repay-options">
+                    <button class="repay-option-btn active" onclick="showRepayOption('repay')">Repay Loan</button>
+                    <button class="repay-option-btn" onclick="showRepayOption('borrow')">Borrow New</button>
+                </div>
+                
+                <div id="repaySection">
+                    <div class="form-group">
+                        <label>Amount to Repay (₹):</label>
+                        <input type="number" id="repayAmountInput" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-success" onclick="repayLoan()">Repay</button>
+                        <button class="btn-danger" onclick="hideModal('repayModal')">Cancel</button>
+                    </div>
+                </div>
+                
+                <div id="borrowSection" style="display: none;">
+                    <div class="form-group">
+                        <label>New Loan Amount (₹):</label>
+                        <input type="number" id="borrowAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <input type="text" id="loanDesc" placeholder="e.g., From friend, Bank loan">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" onclick="addNewLoan()">Add Loan</button>
+                        <button class="btn-danger" onclick="hideModal('repayModal')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rent Payment Modal -->
+        <div class="modal" id="rentModal">
+            <div class="modal-content">
+                <h2>Pay Rent</h2>
+                <div class="form-group">
+                    <label>Rent Amount (₹):</label>
+                    <input type="number" id="rentAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="payRent()">Pay Rent</button>
+                    <button class="btn-danger" onclick="hideModal('rentModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Miscellaneous Modal -->
+        <div class="modal" id="miscModal">
+            <div class="modal-content">
+                <h2>Miscellaneous Expense</h2>
+                <div class="form-group">
+                    <label>Amount (₹):</label>
+                    <input type="number" id="miscAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
                 </div>
                 <div class="form-group">
                     <label>Description:</label>
-                    <input type="text" id="loanDesc" placeholder="e.g., From friend, Bank loan">
+                    <input type="text" id="miscDesc" placeholder="e.g., Food, Shopping, Travel">
                 </div>
                 <div class="btn-group">
-                    <button class="btn-primary" onclick="addNewLoan()">Add Loan</button>
-                    <button class="btn-danger" onclick="hideModal('repayModal')">Cancel</button>
+                    <button class="btn-primary" onclick="addMiscellaneous()">Add Expense</button>
+                    <button class="btn-danger" onclick="hideModal('miscModal')">Cancel</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Rent Payment Modal -->
-    <div class="modal" id="rentModal">
-        <div class="modal-content">
-            <h2>Pay Rent</h2>
-            <div class="form-group">
-                <label>Rent Amount (₹):</label>
-                <input type="number" id="rentAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
-            </div>
-            <div class="btn-group">
-                <button class="btn-primary" onclick="payRent()">Pay Rent</button>
-                <button class="btn-danger" onclick="hideModal('rentModal')">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Miscellaneous Modal -->
-    <div class="modal" id="miscModal">
-        <div class="modal-content">
-            <h2>Miscellaneous Expense</h2>
-            <div class="form-group">
-                <label>Amount (₹):</label>
-                <input type="number" id="miscAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
-            </div>
-            <div class="form-group">
-                <label>Description:</label>
-                <input type="text" id="miscDesc" placeholder="e.g., Food, Shopping, Travel">
-            </div>
-            <div class="btn-group">
-                <button class="btn-primary" onclick="addMiscellaneous()">Add Expense</button>
-                <button class="btn-danger" onclick="hideModal('miscModal')">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Fixed Deposit Modal -->
-    <div class="modal" id="fdModal">
-        <div class="modal-content">
-            <h2>Fixed Deposit Management</h2>
-            <div class="fd-options">
-                <button class="fd-option-btn active" onclick="showFDOption('create')">Create FD</button>
-                <button class="fd-option-btn" onclick="showFDOption('break')">Break FD</button>
-            </div>
-            
-            <div id="createFDSection">
-                <div class="form-group">
-                    <label>FD Amount (₹):</label>
-                    <input type="number" id="fdAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+        <!-- Fixed Deposit Modal -->
+        <div class="modal" id="fdModal">
+            <div class="modal-content">
+                <h2>Fixed Deposit Management</h2>
+                <div class="fd-options">
+                    <button class="fd-option-btn active" onclick="showFDOption('create')">Create FD</button>
+                    <button class="fd-option-btn" onclick="showFDOption('break')">Break FD</button>
                 </div>
-                <div class="form-group">
-                    <label>Bank/Institution:</label>
-                    <input type="text" id="fdBank" placeholder="e.g., SBI, HDFC, Post Office">
+                
+                <div id="createFDSection">
+                    <div class="form-group">
+                        <label>FD Amount (₹):</label>
+                        <input type="number" id="fdAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Bank/Institution:</label>
+                        <input type="text" id="fdBank" placeholder="e.g., SBI, HDFC, Post Office">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-success" onclick="createFD()">Create FD</button>
+                        <button class="btn-danger" onclick="hideModal('fdModal')">Cancel</button>
+                    </div>
                 </div>
-                <div class="btn-group">
-                    <button class="btn-success" onclick="createFD()">Create FD</button>
-                    <button class="btn-danger" onclick="hideModal('fdModal')">Cancel</button>
-                </div>
-            </div>
-            
-            <div id="breakFDSection" style="display: none;">
-                <div class="form-group">
-                    <label>Amount to Withdraw (₹):</label>
-                    <input type="number" id="breakFDAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label>Description:</label>
-                    <input type="text" id="breakFDDesc" placeholder="e.g., Emergency, FD matured">
-                </div>
-                <div class="btn-group">
-                    <button class="btn-primary" onclick="breakFD()">Break FD</button>
-                    <button class="btn-danger" onclick="hideModal('fdModal')">Cancel</button>
+                
+                <div id="breakFDSection" style="display: none;">
+                    <div class="form-group">
+                        <label>Amount to Withdraw (₹):</label>
+                        <input type="number" id="breakFDAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <input type="text" id="breakFDDesc" placeholder="e.g., Emergency, FD matured">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" onclick="breakFD()">Break FD</button>
+                        <button class="btn-danger" onclick="hideModal('fdModal')">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Investments Modal -->
-    <div class="modal" id="investmentModal">
-        <div class="modal-content">
-            <h2>Investment Management</h2>
-            <div class="investment-options">
-                <button class="investment-option-btn active" onclick="showInvestmentOption('invest')">Add Investment</button>
-                <button class="investment-option-btn" onclick="showInvestmentOption('withdraw')">Withdraw</button>
-            </div>
-            
-            <div id="investSection">
-                <div class="form-group">
-                    <label>Investment Amount (₹):</label>
-                    <input type="number" id="investAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+        <!-- Investments Modal -->
+        <div class="modal" id="investmentModal">
+            <div class="modal-content">
+                <h2>Investment Management</h2>
+                <div class="investment-options">
+                    <button class="investment-option-btn active" onclick="showInvestmentOption('invest')">Add Investment</button>
+                    <button class="investment-option-btn" onclick="showInvestmentOption('withdraw')">Withdraw</button>
                 </div>
-                <div class="form-group">
-                    <label>Investment Type:</label>
-                    <select id="investType">
-                        <option value="">Select Type</option>
-                        <option value="Stocks">Stocks</option>
-                        <option value="Mutual Funds">Mutual Funds</option>
-                        <option value="Gold">Gold</option>
-                        <option value="Real Estate">Real Estate</option>
-                        <option value="Crypto">Cryptocurrency</option>
-                        <option value="Bonds">Bonds</option>
-                        <option value="Other">Other</option>
-                    </select>
+                
+                <div id="investSection">
+                    <div class="form-group">
+                        <label>Investment Amount (₹):</label>
+                        <input type="number" id="investAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Investment Type:</label>
+                        <select id="investType">
+                            <option value="">Select Type</option>
+                            <option value="Stocks">Stocks</option>
+                            <option value="Mutual Funds">Mutual Funds</option>
+                            <option value="Gold">Gold</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Crypto">Cryptocurrency</option>
+                            <option value="Bonds">Bonds</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <input type="text" id="investDesc" placeholder="e.g., Reliance shares, SBI Mutual Fund">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" onclick="addInvestment()">Invest</button>
+                        <button class="btn-danger" onclick="hideModal('investmentModal')">Cancel</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Description:</label>
-                    <input type="text" id="investDesc" placeholder="e.g., Reliance shares, SBI Mutual Fund">
-                </div>
-                <div class="btn-group">
-                    <button class="btn-primary" onclick="addInvestment()">Invest</button>
-                    <button class="btn-danger" onclick="hideModal('investmentModal')">Cancel</button>
-                </div>
-            </div>
-            
-            <div id="withdrawSection" style="display: none;">
-                <div class="form-group">
-                    <label>Amount to Withdraw (₹):</label>
-                    <input type="number" id="withdrawAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label>Description:</label>
-                    <input type="text" id="withdrawDesc" placeholder="e.g., Profit booking, Emergency">
-                </div>
-                <div class="btn-group">
-                    <button class="btn-primary" onclick="withdrawInvestment()">Withdraw</button>
-                    <button class="btn-danger" onclick="hideModal('investmentModal')">Cancel</button>
+                
+                <div id="withdrawSection" style="display: none;">
+                    <div class="form-group">
+                        <label>Amount to Withdraw (₹):</label>
+                        <input type="number" id="withdrawAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <input type="text" id="withdrawDesc" placeholder="e.g., Profit booking, Emergency">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" onclick="withdrawInvestment()">Withdraw</button>
+                        <button class="btn-danger" onclick="hideModal('investmentModal')">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Transaction History Modal -->
-    <div class="modal" id="historyModal">
-        <div class="modal-content">
-            <h2>Transaction History</h2>
-            <div class="transaction-list" id="transactionList">
-                <!-- Transactions will appear here -->
-            </div>
-            <div class="btn-group">
-                <button class="btn-danger" onclick="hideModal('historyModal')">Close</button>
+        <!-- Transaction History Modal -->
+        <div class="modal" id="historyModal">
+            <div class="modal-content">
+                <h2>Transaction History</h2>
+                <div class="transaction-list" id="transactionList">
+                    <!-- Transactions will appear here -->
+                </div>
+                <div class="btn-group">
+                    <button class="btn-danger" onclick="hideModal('historyModal')">Close</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Login credentials
+        const VALID_USERNAME = "GopalFinMan";
+        const VALID_PASSWORD = "GpsFin@0001";
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+                // Successful login
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'block';
+                // Load app data
+                loadData();
+            } else {
+                // Failed login
+                errorMessage.style.display = 'block';
+                // Clear password field
+                document.getElementById('password').value = '';
+                // Shake animation for error
+                document.getElementById('loginForm').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.getElementById('loginForm').style.animation = '';
+                }, 500);
+            }
+        });
+
+        // Dark mode functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            body.classList.add('dark-mode');
+            themeToggle.textContent = '☀️ Light Mode';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                themeToggle.textContent = '☀️ Light Mode';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                themeToggle.textContent = '🌙 Dark Mode';
+            }
+        });
+
+        // Add shake animation for login error
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Your existing finance app code continues below...
         // Finance data
         let financeData = {
             availableBalance: 0,
@@ -1362,9 +1589,6 @@
                 e.target.style.display = 'none';
             }
         });
-
-        // Initialize
-        loadData();
     </script>
 </body>
 </html>
