@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Manager App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .balances {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            padding: 20px;
+            background: #ecf0f1;
+        }
+        
+        .balance-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .balance-card h3 {
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .balance-card .amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .menu-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .transaction-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+        
+        .transaction-item {
+            padding: 10px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .transaction-type {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .type-deposit { background: #27ae60; color: white; }
+        .type-family { background: #2980b9; color: white; }
+        .type-repay { background: #e67e22; color: white; }
+        .type-rent { background: #9b59b6; color: white; }
+        .type-misc { background: #e74c3c; color: white; }
+        .type-loan { background: #f39c12; color: white; }
+        .type-fd { background: #16a085; color: white; }
+        .type-investment { background: #8e44ad; color: white; }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .repay-options, .fd-options, .investment-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .repay-option-btn, .fd-option-btn, .investment-option-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .repay-option-btn.active, .fd-option-btn.active, .investment-option-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .fd-option-btn {
+            border-color: #16a085;
+            color: #16a085;
+        }
+        
+        .fd-option-btn.active {
+            background: #16a085;
+            color: white;
+        }
+        
+        .investment-option-btn {
+            border-color: #8e44ad;
+            color: #8e44ad;
+        }
+        
+        .investment-option-btn.active {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert-success {
+            background: #27ae60;
+        }
+
+        .alert-error {
+            background: #e74c3c;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Finance Manager</h1>
+            <p>Manage your money smartly</p>
+        </div>
+        
+        <div class="balances">
+            <div class="balance-card">
+                <h3>Available Balance</h3>
+                <div class="amount" id="availableBalance">$0.00</div>
+            </div>
+            <div class="balance-card">
+                <h3>Family Balance</h3>
+                <div class="amount" id="familyBalance">$0.00</div>
+            </div>
+            <div class="balance-card">
+                <h3>Repay Amount</h3>
+                <div class="amount" id="repayAmount">$0.00</div>
+            </div>
+            <div class="balance-card">
+                <h3>Rent Balance</h3>
+                <div class="amount" id="rentBalance">$0.00</div>
+            </div>
+            <div class="balance-card">
+                <h3>Miscellaneous</h3>
+                <div class="amount" id="miscBalance">$0.00</div>
+            </div>
+            <div class="balance-card">
+                <h3>Fixed Deposit</h3>
+                <div class="amount" id="fdBalance">$0.00</div>
+            </div>
+            <div class="balance-card">
+                <h3>Investments</h3>
+                <div class="amount" id="investmentBalance">$0.00</div>
+            </div>
+        </div>
+        
+        <div class="menu">
+            <button class="menu-btn" onclick="showModal('addBalanceModal')">Add Balance</button>
+            <button class="menu-btn" onclick="showModal('familyModal')">Send to Family</button>
+            <button class="menu-btn" onclick="showModal('repayModal')">Repay Management</button>
+            <button class="menu-btn" onclick="showModal('rentModal')">Pay Rent</button>
+            <button class="menu-btn" onclick="showModal('miscModal')">Miscellaneous</button>
+            <button class="menu-btn" onclick="showModal('fdModal')" style="background: #16a085;">Fixed Deposit</button>
+            <button class="menu-btn" onclick="showModal('investmentModal')" style="background: #8e44ad;">Investments</button>
+            <button class="menu-btn" onclick="showHistory()">Transaction History</button>
+        </div>
+    </div>
+
+    <!-- Add Balance Modal -->
+    <div class="modal" id="addBalanceModal">
+        <div class="modal-content">
+            <h2>Add Available Balance</h2>
+            <div class="form-group">
+                <label>Amount:</label>
+                <input type="number" id="addAmount" placeholder="Enter amount" min="0" step="0.01">
+            </div>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="addBalance()">Add Balance</button>
+                <button class="btn-danger" onclick="hideModal('addBalanceModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Send to Family Modal -->
+    <div class="modal" id="familyModal">
+        <div class="modal-content">
+            <h2>Send to Family</h2>
+            <div class="form-group">
+                <label>Amount:</label>
+                <input type="number" id="familyAmount" placeholder="Enter amount" min="0" step="0.01">
+            </div>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="sendToFamily()">Send</button>
+                <button class="btn-danger" onclick="hideModal('familyModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Repay Management Modal -->
+    <div class="modal" id="repayModal">
+        <div class="modal-content">
+            <h2>Repay Amount Management</h2>
+            <div class="repay-options">
+                <button class="repay-option-btn active" onclick="showRepayOption('repay')">Repay Loan</button>
+                <button class="repay-option-btn" onclick="showRepayOption('borrow')">Borrow New</button>
+            </div>
+            
+            <div id="repaySection">
+                <div class="form-group">
+                    <label>Amount to Repay:</label>
+                    <input type="number" id="repayAmountInput" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-success" onclick="repayLoan()">Repay</button>
+                    <button class="btn-danger" onclick="hideModal('repayModal')">Cancel</button>
+                </div>
+            </div>
+            
+            <div id="borrowSection" style="display: none;">
+                <div class="form-group">
+                    <label>New Loan Amount:</label>
+                    <input type="number" id="borrowAmount" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" id="loanDesc" placeholder="e.g., From friend, Bank loan">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="addNewLoan()">Add Loan</button>
+                    <button class="btn-danger" onclick="hideModal('repayModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rent Payment Modal -->
+    <div class="modal" id="rentModal">
+        <div class="modal-content">
+            <h2>Pay Rent</h2>
+            <div class="form-group">
+                <label>Rent Amount:</label>
+                <input type="number" id="rentAmount" placeholder="Enter amount" min="0" step="0.01">
+            </div>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="payRent()">Pay Rent</button>
+                <button class="btn-danger" onclick="hideModal('rentModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Miscellaneous Modal -->
+    <div class="modal" id="miscModal">
+        <div class="modal-content">
+            <h2>Miscellaneous Expense</h2>
+            <div class="form-group">
+                <label>Amount:</label>
+                <input type="number" id="miscAmount" placeholder="Enter amount" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <input type="text" id="miscDesc" placeholder="e.g., Food, Shopping, Travel">
+            </div>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="addMiscellaneous()">Add Expense</button>
+                <button class="btn-danger" onclick="hideModal('miscModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fixed Deposit Modal -->
+    <div class="modal" id="fdModal">
+        <div class="modal-content">
+            <h2>Fixed Deposit Management</h2>
+            <div class="fd-options">
+                <button class="fd-option-btn active" onclick="showFDOption('create')">Create FD</button>
+                <button class="fd-option-btn" onclick="showFDOption('break')">Break FD</button>
+            </div>
+            
+            <div id="createFDSection">
+                <div class="form-group">
+                    <label>FD Amount:</label>
+                    <input type="number" id="fdAmount" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Bank/Institution:</label>
+                    <input type="text" id="fdBank" placeholder="e.g., SBI, HDFC, Post Office">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-success" onclick="createFD()">Create FD</button>
+                    <button class="btn-danger" onclick="hideModal('fdModal')">Cancel</button>
+                </div>
+            </div>
+            
+            <div id="breakFDSection" style="display: none;">
+                <div class="form-group">
+                    <label>Amount to Withdraw:</label>
+                    <input type="number" id="breakFDAmount" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" id="breakFDDesc" placeholder="e.g., Emergency, FD matured">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="breakFD()">Break FD</button>
+                    <button class="btn-danger" onclick="hideModal('fdModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Investments Modal -->
+    <div class="modal" id="investmentModal">
+        <div class="modal-content">
+            <h2>Investment Management</h2>
+            <div class="investment-options">
+                <button class="investment-option-btn active" onclick="showInvestmentOption('invest')">Add Investment</button>
+                <button class="investment-option-btn" onclick="showInvestmentOption('withdraw')">Withdraw</button>
+            </div>
+            
+            <div id="investSection">
+                <div class="form-group">
+                    <label>Investment Amount:</label>
+                    <input type="number" id="investAmount" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Investment Type:</label>
+                    <select id="investType">
+                        <option value="">Select Type</option>
+                        <option value="Stocks">Stocks</option>
+                        <option value="Mutual Funds">Mutual Funds</option>
+                        <option value="Gold">Gold</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Crypto">Cryptocurrency</option>
+                        <option value="Bonds">Bonds</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" id="investDesc" placeholder="e.g., Reliance shares, SBI Mutual Fund">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="addInvestment()">Invest</button>
+                    <button class="btn-danger" onclick="hideModal('investmentModal')">Cancel</button>
+                </div>
+            </div>
+            
+            <div id="withdrawSection" style="display: none;">
+                <div class="form-group">
+                    <label>Amount to Withdraw:</label>
+                    <input type="number" id="withdrawAmount" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" id="withdrawDesc" placeholder="e.g., Profit booking, Emergency">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="withdrawInvestment()">Withdraw</button>
+                    <button class="btn-danger" onclick="hideModal('investmentModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction History Modal -->
+    <div class="modal" id="historyModal">
+        <div class="modal-content">
+            <h2>Transaction History</h2>
+            <div class="transaction-list" id="transactionList">
+                <!-- Transactions will appear here -->
+            </div>
+            <div class="btn-group">
+                <button class="btn-danger" onclick="hideModal('historyModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Finance data
+        let financeData = {
+            availableBalance: 0,
+            familyBalance: 0,
+            repayAmount: 0,
+            rentBalance: 0,
+            miscBalance: 0,
+            fdBalance: 0,
+            investmentBalance: 0,
+            transactions: []
+        };
+
+        // Show custom alert
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('financeData');
+            if (saved) {
+                financeData = JSON.parse(saved);
+            }
+            updateDisplay();
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('financeData', JSON.stringify(financeData));
+            updateDisplay();
+        }
+
+        // Update display
+        function updateDisplay() {
+            document.getElementById('availableBalance').textContent = `$${financeData.availableBalance.toFixed(2)}`;
+            document.getElementById('familyBalance').textContent = `$${financeData.familyBalance.toFixed(2)}`;
+            document.getElementById('repayAmount').textContent = `$${financeData.repayAmount.toFixed(2)}`;
+            document.getElementById('rentBalance').textContent = `$${financeData.rentBalance.toFixed(2)}`;
+            document.getElementById('miscBalance').textContent = `$${financeData.miscBalance.toFixed(2)}`;
+            document.getElementById('fdBalance').textContent = `$${financeData.fdBalance.toFixed(2)}`;
+            document.getElementById('investmentBalance').textContent = `$${financeData.investmentBalance.toFixed(2)}`;
+        }
+
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+            clearModalInputs(modalId);
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function clearModalInputs(modalId) {
+            const inputs = document.querySelectorAll(`#${modalId} input, #${modalId} select`);
+            inputs.forEach(input => input.value = '');
+        }
+
+        // Repay management options
+        function showRepayOption(option) {
+            const repaySection = document.getElementById('repaySection');
+            const borrowSection = document.getElementById('borrowSection');
+            const repayBtn = document.querySelectorAll('.repay-option-btn')[0];
+            const borrowBtn = document.querySelectorAll('.repay-option-btn')[1];
+            
+            if (option === 'repay') {
+                repaySection.style.display = 'block';
+                borrowSection.style.display = 'none';
+                repayBtn.classList.add('active');
+                borrowBtn.classList.remove('active');
+            } else {
+                repaySection.style.display = 'none';
+                borrowSection.style.display = 'block';
+                repayBtn.classList.remove('active');
+                borrowBtn.classList.add('active');
+            }
+        }
+
+        // FD management options
+        function showFDOption(option) {
+            const createSection = document.getElementById('createFDSection');
+            const breakSection = document.getElementById('breakFDSection');
+            const createBtn = document.querySelectorAll('.fd-option-btn')[0];
+            const breakBtn = document.querySelectorAll('.fd-option-btn')[1];
+            
+            if (option === 'create') {
+                createSection.style.display = 'block';
+                breakSection.style.display = 'none';
+                createBtn.classList.add('active');
+                breakBtn.classList.remove('active');
+            } else {
+                createSection.style.display = 'none';
+                breakSection.style.display = 'block';
+                createBtn.classList.remove('active');
+                breakBtn.classList.add('active');
+            }
+        }
+
+        // Investment management options
+        function showInvestmentOption(option) {
+            const investSection = document.getElementById('investSection');
+            const withdrawSection = document.getElementById('withdrawSection');
+            const investBtn = document.querySelectorAll('.investment-option-btn')[0];
+            const withdrawBtn = document.querySelectorAll('.investment-option-btn')[1];
+            
+            if (option === 'invest') {
+                investSection.style.display = 'block';
+                withdrawSection.style.display = 'none';
+                investBtn.classList.add('active');
+                withdrawBtn.classList.remove('active');
+            } else {
+                investSection.style.display = 'none';
+                withdrawSection.style.display = 'block';
+                investBtn.classList.remove('active');
+                withdrawBtn.classList.add('active');
+            }
+        }
+
+        // Add balance
+        function addBalance() {
+            const amount = parseFloat(document.getElementById('addAmount').value);
+            if (amount > 0) {
+                financeData.availableBalance += amount;
+                financeData.transactions.push({
+                    type: 'DEPOSIT',
+                    amount: amount,
+                    description: 'Added to available balance',
+                    date: new Date().toLocaleDateString(),
+                    timestamp: new Date().toISOString()
+                });
+                saveData();
+                hideModal('addBalanceModal');
+                showAlert(`✅ Successfully added $${amount.toFixed(2)} to available balance!`);
+            } else {
+                showAlert('❌ Please enter a valid amount', 'error');
+            }
+        }
+
+        // Send to family
+        function sendToFamily() {
+            const amount = parseFloat(document.getElementById('familyAmount').value);
+            if (amount > 0) {
+                if (amount <= financeData.availableBalance) {
+                    financeData.availableBalance -= amount;
+                    financeData.familyBalance += amount;
+                    financeData.transactions.push({
+                        type: 'FAMILY_SEND',
+                        amount: amount,
+                        description: 'Sent to family',
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('familyModal');
+                    showAlert(`✅ Successfully sent $${amount.toFixed(2)} to family!`);
+                } else {
+                    showAlert('❌ Insufficient available balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please enter a valid amount', 'error');
+            }
+        }
+
+        // Repay loan
+        function repayLoan() {
+            const amount = parseFloat(document.getElementById('repayAmountInput').value);
+            if (amount > 0) {
+                if (amount <= financeData.availableBalance) {
+                    if (amount <= financeData.repayAmount) {
+                        financeData.availableBalance -= amount;
+                        financeData.repayAmount -= amount;
+                        financeData.transactions.push({
+                            type: 'REPAYMENT',
+                            amount: amount,
+                            description: 'Loan repayment',
+                            date: new Date().toLocaleDateString(),
+                            timestamp: new Date().toISOString()
+                        });
+                        saveData();
+                        hideModal('repayModal');
+                        showAlert(`✅ Successfully repaid $${amount.toFixed(2)}!`);
+                    } else {
+                        showAlert('❌ Repayment amount exceeds total debt!', 'error');
+                    }
+                } else {
+                    showAlert('❌ Insufficient available balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please enter a valid amount', 'error');
+            }
+        }
+
+        // Add new loan
+        function addNewLoan() {
+            const amount = parseFloat(document.getElementById('borrowAmount').value);
+            const description = document.getElementById('loanDesc').value;
+            
+            if (amount > 0) {
+                financeData.repayAmount += amount;
+                financeData.availableBalance += amount;
+                financeData.transactions.push({
+                    type: 'NEW_LOAN',
+                    amount: amount,
+                    description: description || 'New loan',
+                    date: new Date().toLocaleDateString(),
+                    timestamp: new Date().toISOString()
+                });
+                saveData();
+                hideModal('repayModal');
+                showAlert(`✅ Successfully added new loan of $${amount.toFixed(2)}!`);
+            } else {
+                showAlert('❌ Please enter a valid amount', 'error');
+            }
+        }
+
+        // Pay rent
+        function payRent() {
+            const amount = parseFloat(document.getElementById('rentAmount').value);
+            if (amount > 0) {
+                if (amount <= financeData.availableBalance) {
+                    financeData.availableBalance -= amount;
+                    financeData.rentBalance += amount;
+                    financeData.transactions.push({
+                        type: 'RENT',
+                        amount: amount,
+                        description: 'Rent payment',
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('rentModal');
+                    showAlert(`✅ Successfully paid rent of $${amount.toFixed(2)}!`);
+                } else {
+                    showAlert('❌ Insufficient available balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please enter a valid amount', 'error');
+            }
+        }
+
+        // Add miscellaneous expense
+        function addMiscellaneous() {
+            const amount = parseFloat(document.getElementById('miscAmount').value);
+            const description = document.getElementById('miscDesc').value;
+            
+            if (amount > 0) {
+                if (amount <= financeData.availableBalance) {
+                    financeData.availableBalance -= amount;
+                    financeData.miscBalance += amount;
+                    financeData.transactions.push({
+                        type: 'MISCELLANEOUS',
+                        amount: amount,
+                        description: description || 'Miscellaneous expense',
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('miscModal');
+                    showAlert(`✅ Successfully recorded $${amount.toFixed(2)} miscellaneous expense!`);
+                } else {
+                    showAlert('❌ Insufficient available balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please enter a valid amount', 'error');
+            }
+        }
+
+        // Create Fixed Deposit
+        function createFD() {
+            const amount = parseFloat(document.getElementById('fdAmount').value);
+            const bank = document.getElementById('fdBank').value;
+            
+            if (amount > 0 && bank) {
+                if (amount <= financeData.availableBalance) {
+                    financeData.availableBalance -= amount;
+                    financeData.fdBalance += amount;
+                    financeData.transactions.push({
+                        type: 'FIXED_DEPOSIT',
+                        amount: amount,
+                        description: `FD created with ${bank}`,
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('fdModal');
+                    showAlert(`✅ Successfully created FD of $${amount.toFixed(2)} with ${bank}!`);
+                } else {
+                    showAlert('❌ Insufficient available balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please fill all fields with valid values', 'error');
+            }
+        }
+
+        // Break Fixed Deposit
+        function breakFD() {
+            const amount = parseFloat(document.getElementById('breakFDAmount').value);
+            const description = document.getElementById('breakFDDesc').value;
+            
+            if (amount > 0) {
+                if (amount <= financeData.fdBalance) {
+                    financeData.fdBalance -= amount;
+                    financeData.availableBalance += amount;
+                    financeData.transactions.push({
+                        type: 'FD_BREAK',
+                        amount: amount,
+                        description: description || 'FD broken',
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('fdModal');
+                    showAlert(`✅ Successfully broke FD of $${amount.toFixed(2)}!`);
+                } else {
+                    showAlert('❌ Insufficient FD balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please enter a valid amount', 'error');
+            }
+        }
+
+        // Add Investment
+        function addInvestment() {
+            const amount = parseFloat(document.getElementById('investAmount').value);
+            const type = document.getElementById('investType').value;
+            const description = document.getElementById('investDesc').value;
+            
+            if (amount > 0 && type) {
+                if (amount <= financeData.availableBalance) {
+                    financeData.availableBalance -= amount;
+                    financeData.investmentBalance += amount;
+                    financeData.transactions.push({
+                        type: 'INVESTMENT',
+                        amount: amount,
+                        description: `${type}: ${description || 'Investment made'}`,
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('investmentModal');
+                    showAlert(`✅ Successfully invested $${amount.toFixed(2)} in ${type}!`);
+                } else {
+                    showAlert('❌ Insufficient available balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please fill all required fields', 'error');
+            }
+        }
+
+        // Withdraw Investment
+        function withdrawInvestment() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const description = document.getElementById('withdrawDesc').value;
+            
+            if (amount > 0) {
+                if (amount <= financeData.investmentBalance) {
+                    financeData.investmentBalance -= amount;
+                    financeData.availableBalance += amount;
+                    financeData.transactions.push({
+                        type: 'INVESTMENT_WITHDRAW',
+                        amount: amount,
+                        description: description || 'Investment withdrawal',
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('investmentModal');
+                    showAlert(`✅ Successfully withdrew $${amount.toFixed(2)} from investments!`);
+                } else {
+                    showAlert('❌ Insufficient investment balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please enter a valid amount', 'error');
+            }
+        }
+
+        // Show transaction history
+        function showHistory() {
+            const list = document.getElementById('transactionList');
+            list.innerHTML = '';
+            
+            if (financeData.transactions.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #7f8c8d;">No transactions yet</p>';
+                return;
+            }
+            
+            // Sort transactions by timestamp (newest first)
+            const sortedTransactions = [...financeData.transactions].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
+            
+            sortedTransactions.forEach(transaction => {
+                const item = document.createElement('div');
+                item.className = 'transaction-item';
+                
+                const typeClass = `type-${transaction.type.toLowerCase().replace('_', '-')}`;
+                const isPositive = transaction.type === 'DEPOSIT' || transaction.type === 'NEW_LOAN' || 
+                                 transaction.type === 'FD_BREAK' || transaction.type === 'INVESTMENT_WITHDRAW';
+                
+                item.innerHTML = `
+                    <div style="flex: 1;">
+                        <span class="transaction-type ${typeClass}">${transaction.type}</span>
+                        <div style="margin-top: 5px; font-size: 12px; color: #7f8c8d;">
+                            ${transaction.description} • ${transaction.date}
+                        </div>
+                    </div>
+                    <div style="font-weight: bold; color: ${isPositive ? '#27ae60' : '#e74c3c'};">
+                        ${isPositive ? '+' : '-'}$${transaction.amount.toFixed(2)}
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+            
+            showModal('historyModal');
+        }
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>
