@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance Manager App</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -19,7 +20,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
@@ -34,12 +35,51 @@
             text-align: center;
         }
         
+        .data-management {
+            text-align: center;
+            padding: 15px;
+            background: #34495e;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .data-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .data-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .data-btn.import {
+            background: #3498db;
+        }
+        
+        .data-btn.clear {
+            background: #e74c3c;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            background: #ecf0f1;
+        }
+        
         .balances {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 10px;
-            padding: 20px;
-            background: #ecf0f1;
         }
         
         .balance-card {
@@ -60,6 +100,21 @@
             font-size: 18px;
             font-weight: bold;
             color: #2c3e50;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 300px;
+        }
+        
+        .chart-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
         
         .menu {
@@ -265,8 +320,30 @@
             }
         }
 
-        .currency-symbol {
-            font-family: Arial, sans-serif;
+        .no-data {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-management {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .data-btn {
+                width: 200px;
+            }
         }
     </style>
 </head>
@@ -277,34 +354,47 @@
             <p>Manage your money smartly</p>
         </div>
         
-        <div class="balances">
-            <div class="balance-card">
-                <h3>Available Balance</h3>
-                <div class="amount" id="availableBalance">₹0.00</div>
+        <div class="data-management">
+            <button class="data-btn" onclick="exportData()">📥 Export Data</button>
+            <button class="data-btn import" onclick="importData()">📤 Import Data</button>
+            <button class="data-btn clear" onclick="clearAllData()">🗑️ Clear Data</button>
+        </div>
+        
+        <div class="dashboard">
+            <div class="balances">
+                <div class="balance-card">
+                    <h3>Available Balance</h3>
+                    <div class="amount" id="availableBalance">₹0.00</div>
+                </div>
+                <div class="balance-card">
+                    <h3>Family Balance</h3>
+                    <div class="amount" id="familyBalance">₹0.00</div>
+                </div>
+                <div class="balance-card">
+                    <h3>Repay Amount</h3>
+                    <div class="amount" id="repayAmount">₹0.00</div>
+                </div>
+                <div class="balance-card">
+                    <h3>Rent Balance</h3>
+                    <div class="amount" id="rentBalance">₹0.00</div>
+                </div>
+                <div class="balance-card">
+                    <h3>Miscellaneous</h3>
+                    <div class="amount" id="miscBalance">₹0.00</div>
+                </div>
+                <div class="balance-card">
+                    <h3>Fixed Deposit</h3>
+                    <div class="amount" id="fdBalance">₹0.00</div>
+                </div>
+                <div class="balance-card">
+                    <h3>Investments</h3>
+                    <div class="amount" id="investmentBalance">₹0.00</div>
+                </div>
             </div>
-            <div class="balance-card">
-                <h3>Family Balance</h3>
-                <div class="amount" id="familyBalance">₹0.00</div>
-            </div>
-            <div class="balance-card">
-                <h3>Repay Amount</h3>
-                <div class="amount" id="repayAmount">₹0.00</div>
-            </div>
-            <div class="balance-card">
-                <h3>Rent Balance</h3>
-                <div class="amount" id="rentBalance">₹0.00</div>
-            </div>
-            <div class="balance-card">
-                <h3>Miscellaneous</h3>
-                <div class="amount" id="miscBalance">₹0.00</div>
-            </div>
-            <div class="balance-card">
-                <h3>Fixed Deposit</h3>
-                <div class="amount" id="fdBalance">₹0.00</div>
-            </div>
-            <div class="balance-card">
-                <h3>Investments</h3>
-                <div class="amount" id="investmentBalance">₹0.00</div>
+            
+            <div class="chart-container">
+                <div class="chart-title">Money Distribution</div>
+                <canvas id="financeChart"></canvas>
             </div>
         </div>
         
@@ -542,6 +632,8 @@
             transactions: []
         };
 
+        let financeChart = null;
+
         // Show custom alert
         function showAlert(message, type = 'success') {
             const alertDiv = document.createElement('div');
@@ -559,6 +651,158 @@
             return '₹' + amount.toFixed(2);
         }
 
+        // Calculate total money
+        function getTotalMoney() {
+            return financeData.availableBalance + 
+                   financeData.familyBalance + 
+                   financeData.fdBalance + 
+                   financeData.investmentBalance;
+        }
+
+        // Update pie chart
+        function updateChart() {
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            const totalMoney = getTotalMoney();
+            
+            // Destroy existing chart if it exists
+            if (financeChart) {
+                financeChart.destroy();
+            }
+
+            if (totalMoney === 0) {
+                document.getElementById('financeChart').innerHTML = '<div class="no-data">Add money to see distribution chart</div>';
+                return;
+            }
+
+            const data = {
+                labels: [
+                    'Available Balance',
+                    'Family Balance', 
+                    'Fixed Deposit',
+                    'Investments'
+                ],
+                datasets: [{
+                    data: [
+                        financeData.availableBalance,
+                        financeData.familyBalance,
+                        financeData.fdBalance,
+                        financeData.investmentBalance
+                    ],
+                    backgroundColor: [
+                        '#3498db', // Available - Blue
+                        '#2980b9', // Family - Dark Blue
+                        '#16a085', // FD - Teal
+                        '#8e44ad'  // Investments - Purple
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    hoverOffset: 15
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const percentage = totalMoney > 0 ? ((value / totalMoney) * 100).toFixed(1) : 0;
+                                return `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            };
+
+            financeChart = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: options
+            });
+        }
+
+        // Export data to JSON file
+        function exportData() {
+            const dataStr = JSON.stringify(financeData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `finance_data_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showAlert('✅ Data exported! Save this file to backup your data.');
+        }
+
+        // Import data from JSON file
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        if (importedData.availableBalance !== undefined) {
+                            if (confirm('This will replace your current data. Continue?')) {
+                                financeData = importedData;
+                                saveData();
+                                showAlert('✅ Data imported successfully!');
+                            }
+                        } else {
+                            showAlert('❌ Invalid data file!', 'error');
+                        }
+                    } catch (error) {
+                        showAlert('❌ Error reading file!', 'error');
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        // Clear all data
+        function clearAllData() {
+            if (confirm('⚠️ Are you sure? This will delete ALL your financial data!')) {
+                if (confirm('❗️ LAST WARNING: This cannot be undone!')) {
+                    financeData = {
+                        availableBalance: 0,
+                        familyBalance: 0,
+                        repayAmount: 0,
+                        rentBalance: 0,
+                        miscBalance: 0,
+                        fdBalance: 0,
+                        investmentBalance: 0,
+                        transactions: []
+                    };
+                    saveData();
+                    showAlert('🗑️ All data cleared!');
+                }
+            }
+        }
+
         // Load data from localStorage
         function loadData() {
             const saved = localStorage.getItem('financeData');
@@ -566,12 +810,14 @@
                 financeData = JSON.parse(saved);
             }
             updateDisplay();
+            updateChart();
         }
 
         // Save data to localStorage
         function saveData() {
             localStorage.setItem('financeData', JSON.stringify(financeData));
             updateDisplay();
+            updateChart();
         }
 
         // Update display
