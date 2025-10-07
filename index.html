@@ -264,6 +264,10 @@
                 opacity: 1;
             }
         }
+
+        .currency-symbol {
+            font-family: Arial, sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -276,31 +280,31 @@
         <div class="balances">
             <div class="balance-card">
                 <h3>Available Balance</h3>
-                <div class="amount" id="availableBalance">$0.00</div>
+                <div class="amount" id="availableBalance">₹0.00</div>
             </div>
             <div class="balance-card">
                 <h3>Family Balance</h3>
-                <div class="amount" id="familyBalance">$0.00</div>
+                <div class="amount" id="familyBalance">₹0.00</div>
             </div>
             <div class="balance-card">
                 <h3>Repay Amount</h3>
-                <div class="amount" id="repayAmount">$0.00</div>
+                <div class="amount" id="repayAmount">₹0.00</div>
             </div>
             <div class="balance-card">
                 <h3>Rent Balance</h3>
-                <div class="amount" id="rentBalance">$0.00</div>
+                <div class="amount" id="rentBalance">₹0.00</div>
             </div>
             <div class="balance-card">
                 <h3>Miscellaneous</h3>
-                <div class="amount" id="miscBalance">$0.00</div>
+                <div class="amount" id="miscBalance">₹0.00</div>
             </div>
             <div class="balance-card">
                 <h3>Fixed Deposit</h3>
-                <div class="amount" id="fdBalance">$0.00</div>
+                <div class="amount" id="fdBalance">₹0.00</div>
             </div>
             <div class="balance-card">
                 <h3>Investments</h3>
-                <div class="amount" id="investmentBalance">$0.00</div>
+                <div class="amount" id="investmentBalance">₹0.00</div>
             </div>
         </div>
         
@@ -321,8 +325,8 @@
         <div class="modal-content">
             <h2>Add Available Balance</h2>
             <div class="form-group">
-                <label>Amount:</label>
-                <input type="number" id="addAmount" placeholder="Enter amount" min="0" step="0.01">
+                <label>Amount (₹):</label>
+                <input type="number" id="addAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
             </div>
             <div class="btn-group">
                 <button class="btn-primary" onclick="addBalance()">Add Balance</button>
@@ -336,8 +340,8 @@
         <div class="modal-content">
             <h2>Send to Family</h2>
             <div class="form-group">
-                <label>Amount:</label>
-                <input type="number" id="familyAmount" placeholder="Enter amount" min="0" step="0.01">
+                <label>Amount (₹):</label>
+                <input type="number" id="familyAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
             </div>
             <div class="btn-group">
                 <button class="btn-primary" onclick="sendToFamily()">Send</button>
@@ -357,8 +361,8 @@
             
             <div id="repaySection">
                 <div class="form-group">
-                    <label>Amount to Repay:</label>
-                    <input type="number" id="repayAmountInput" placeholder="Enter amount" min="0" step="0.01">
+                    <label>Amount to Repay (₹):</label>
+                    <input type="number" id="repayAmountInput" placeholder="Enter amount in rupees" min="0" step="0.01">
                 </div>
                 <div class="btn-group">
                     <button class="btn-success" onclick="repayLoan()">Repay</button>
@@ -368,8 +372,8 @@
             
             <div id="borrowSection" style="display: none;">
                 <div class="form-group">
-                    <label>New Loan Amount:</label>
-                    <input type="number" id="borrowAmount" placeholder="Enter amount" min="0" step="0.01">
+                    <label>New Loan Amount (₹):</label>
+                    <input type="number" id="borrowAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
                 </div>
                 <div class="form-group">
                     <label>Description:</label>
@@ -388,8 +392,8 @@
         <div class="modal-content">
             <h2>Pay Rent</h2>
             <div class="form-group">
-                <label>Rent Amount:</label>
-                <input type="number" id="rentAmount" placeholder="Enter amount" min="0" step="0.01">
+                <label>Rent Amount (₹):</label>
+                <input type="number" id="rentAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
             </div>
             <div class="btn-group">
                 <button class="btn-primary" onclick="payRent()">Pay Rent</button>
@@ -403,8 +407,8 @@
         <div class="modal-content">
             <h2>Miscellaneous Expense</h2>
             <div class="form-group">
-                <label>Amount:</label>
-                <input type="number" id="miscAmount" placeholder="Enter amount" min="0" step="0.01">
+                <label>Amount (₹):</label>
+                <input type="number" id="miscAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
             </div>
             <div class="form-group">
                 <label>Description:</label>
@@ -428,8 +432,8 @@
             
             <div id="createFDSection">
                 <div class="form-group">
-                    <label>FD Amount:</label>
-                    <input type="number" id="fdAmount" placeholder="Enter amount" min="0" step="0.01">
+                    <label>FD Amount (₹):</label>
+                    <input type="number" id="fdAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
                 </div>
                 <div class="form-group">
                     <label>Bank/Institution:</label>
@@ -443,8 +447,8 @@
             
             <div id="breakFDSection" style="display: none;">
                 <div class="form-group">
-                    <label>Amount to Withdraw:</label>
-                    <input type="number" id="breakFDAmount" placeholder="Enter amount" min="0" step="0.01">
+                    <label>Amount to Withdraw (₹):</label>
+                    <input type="number" id="breakFDAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
                 </div>
                 <div class="form-group">
                     <label>Description:</label>
@@ -469,8 +473,8 @@
             
             <div id="investSection">
                 <div class="form-group">
-                    <label>Investment Amount:</label>
-                    <input type="number" id="investAmount" placeholder="Enter amount" min="0" step="0.01">
+                    <label>Investment Amount (₹):</label>
+                    <input type="number" id="investAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
                 </div>
                 <div class="form-group">
                     <label>Investment Type:</label>
@@ -497,8 +501,8 @@
             
             <div id="withdrawSection" style="display: none;">
                 <div class="form-group">
-                    <label>Amount to Withdraw:</label>
-                    <input type="number" id="withdrawAmount" placeholder="Enter amount" min="0" step="0.01">
+                    <label>Amount to Withdraw (₹):</label>
+                    <input type="number" id="withdrawAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
                 </div>
                 <div class="form-group">
                     <label>Description:</label>
@@ -550,6 +554,11 @@
             }, 3000);
         }
 
+        // Format currency in Indian Rupees
+        function formatCurrency(amount) {
+            return '₹' + amount.toFixed(2);
+        }
+
         // Load data from localStorage
         function loadData() {
             const saved = localStorage.getItem('financeData');
@@ -567,13 +576,13 @@
 
         // Update display
         function updateDisplay() {
-            document.getElementById('availableBalance').textContent = `$${financeData.availableBalance.toFixed(2)}`;
-            document.getElementById('familyBalance').textContent = `$${financeData.familyBalance.toFixed(2)}`;
-            document.getElementById('repayAmount').textContent = `$${financeData.repayAmount.toFixed(2)}`;
-            document.getElementById('rentBalance').textContent = `$${financeData.rentBalance.toFixed(2)}`;
-            document.getElementById('miscBalance').textContent = `$${financeData.miscBalance.toFixed(2)}`;
-            document.getElementById('fdBalance').textContent = `$${financeData.fdBalance.toFixed(2)}`;
-            document.getElementById('investmentBalance').textContent = `$${financeData.investmentBalance.toFixed(2)}`;
+            document.getElementById('availableBalance').textContent = formatCurrency(financeData.availableBalance);
+            document.getElementById('familyBalance').textContent = formatCurrency(financeData.familyBalance);
+            document.getElementById('repayAmount').textContent = formatCurrency(financeData.repayAmount);
+            document.getElementById('rentBalance').textContent = formatCurrency(financeData.rentBalance);
+            document.getElementById('miscBalance').textContent = formatCurrency(financeData.miscBalance);
+            document.getElementById('fdBalance').textContent = formatCurrency(financeData.fdBalance);
+            document.getElementById('investmentBalance').textContent = formatCurrency(financeData.investmentBalance);
         }
 
         // Modal functions
@@ -665,7 +674,7 @@
                 });
                 saveData();
                 hideModal('addBalanceModal');
-                showAlert(`✅ Successfully added $${amount.toFixed(2)} to available balance!`);
+                showAlert(`✅ Successfully added ${formatCurrency(amount)} to available balance!`);
             } else {
                 showAlert('❌ Please enter a valid amount', 'error');
             }
@@ -687,7 +696,7 @@
                     });
                     saveData();
                     hideModal('familyModal');
-                    showAlert(`✅ Successfully sent $${amount.toFixed(2)} to family!`);
+                    showAlert(`✅ Successfully sent ${formatCurrency(amount)} to family!`);
                 } else {
                     showAlert('❌ Insufficient available balance!', 'error');
                 }
@@ -713,7 +722,7 @@
                         });
                         saveData();
                         hideModal('repayModal');
-                        showAlert(`✅ Successfully repaid $${amount.toFixed(2)}!`);
+                        showAlert(`✅ Successfully repaid ${formatCurrency(amount)}!`);
                     } else {
                         showAlert('❌ Repayment amount exceeds total debt!', 'error');
                     }
@@ -742,7 +751,7 @@
                 });
                 saveData();
                 hideModal('repayModal');
-                showAlert(`✅ Successfully added new loan of $${amount.toFixed(2)}!`);
+                showAlert(`✅ Successfully added new loan of ${formatCurrency(amount)}!`);
             } else {
                 showAlert('❌ Please enter a valid amount', 'error');
             }
@@ -764,7 +773,7 @@
                     });
                     saveData();
                     hideModal('rentModal');
-                    showAlert(`✅ Successfully paid rent of $${amount.toFixed(2)}!`);
+                    showAlert(`✅ Successfully paid rent of ${formatCurrency(amount)}!`);
                 } else {
                     showAlert('❌ Insufficient available balance!', 'error');
                 }
@@ -791,7 +800,7 @@
                     });
                     saveData();
                     hideModal('miscModal');
-                    showAlert(`✅ Successfully recorded $${amount.toFixed(2)} miscellaneous expense!`);
+                    showAlert(`✅ Successfully recorded ${formatCurrency(amount)} miscellaneous expense!`);
                 } else {
                     showAlert('❌ Insufficient available balance!', 'error');
                 }
@@ -818,7 +827,7 @@
                     });
                     saveData();
                     hideModal('fdModal');
-                    showAlert(`✅ Successfully created FD of $${amount.toFixed(2)} with ${bank}!`);
+                    showAlert(`✅ Successfully created FD of ${formatCurrency(amount)} with ${bank}!`);
                 } else {
                     showAlert('❌ Insufficient available balance!', 'error');
                 }
@@ -845,7 +854,7 @@
                     });
                     saveData();
                     hideModal('fdModal');
-                    showAlert(`✅ Successfully broke FD of $${amount.toFixed(2)}!`);
+                    showAlert(`✅ Successfully broke FD of ${formatCurrency(amount)}!`);
                 } else {
                     showAlert('❌ Insufficient FD balance!', 'error');
                 }
@@ -873,7 +882,7 @@
                     });
                     saveData();
                     hideModal('investmentModal');
-                    showAlert(`✅ Successfully invested $${amount.toFixed(2)} in ${type}!`);
+                    showAlert(`✅ Successfully invested ${formatCurrency(amount)} in ${type}!`);
                 } else {
                     showAlert('❌ Insufficient available balance!', 'error');
                 }
@@ -900,7 +909,7 @@
                     });
                     saveData();
                     hideModal('investmentModal');
-                    showAlert(`✅ Successfully withdrew $${amount.toFixed(2)} from investments!`);
+                    showAlert(`✅ Successfully withdrew ${formatCurrency(amount)} from investments!`);
                 } else {
                     showAlert('❌ Insufficient investment balance!', 'error');
                 }
@@ -940,7 +949,7 @@
                         </div>
                     </div>
                     <div style="font-weight: bold; color: ${isPositive ? '#27ae60' : '#e74c3c'};">
-                        ${isPositive ? '+' : '-'}$${transaction.amount.toFixed(2)}
+                        ${isPositive ? '+' : '-'}${formatCurrency(transaction.amount)}
                     </div>
                 `;
                 list.appendChild(item);
