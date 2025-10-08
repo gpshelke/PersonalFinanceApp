@@ -12,6 +12,7 @@
             box-sizing: border-box;
         }
         
+        /* Default Theme (Blue/Purple) */
         :root {
             --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --bg-secondary: white;
@@ -22,9 +23,44 @@
             --input-bg: white;
             --border-color: #bdc3c7;
             --shadow: rgba(0,0,0,0.3);
+            --header-bg: #2c3e50;
+            --data-management-bg: #34495e;
+            --menu-btn-bg: #3498db;
+            --menu-btn-hover: #2980b9;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
         }
-        
-        .dark-mode {
+
+        /* Green Theme */
+        .theme-green {
+            --bg-primary: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            --header-bg: #1B5E20;
+            --data-management-bg: #2E7D32;
+            --menu-btn-bg: #4CAF50;
+            --menu-btn-hover: #388E3C;
+        }
+
+        /* Orange Theme */
+        .theme-orange {
+            --bg-primary: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            --header-bg: #E65100;
+            --data-management-bg: #EF6C00;
+            --menu-btn-bg: #FF9800;
+            --menu-btn-hover: #F57C00;
+        }
+
+        /* Red Theme */
+        .theme-red {
+            --bg-primary: linear-gradient(135deg, #f44336 0%, #D32F2F 100%);
+            --header-bg: #B71C1C;
+            --data-management-bg: #C62828;
+            --menu-btn-bg: #f44336;
+            --menu-btn-hover: #D32F2F;
+        }
+
+        /* Dark Theme */
+        .theme-dark {
             --bg-primary: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             --bg-secondary: #1a1a1a;
             --text-primary: #ecf0f1;
@@ -34,6 +70,10 @@
             --input-bg: #2c3e50;
             --border-color: #4a5f7a;
             --shadow: rgba(0,0,0,0.6);
+            --header-bg: #1a252f;
+            --data-management-bg: #2c3e50;
+            --menu-btn-bg: #3498db;
+            --menu-btn-hover: #2980b9;
         }
         
         body {
@@ -87,11 +127,11 @@
         
         .login-input:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: var(--menu-btn-bg);
         }
         
         .login-btn {
-            background: #3498db;
+            background: var(--menu-btn-bg);
             color: white;
             border: none;
             padding: 15px;
@@ -102,11 +142,11 @@
         }
         
         .login-btn:hover {
-            background: #2980b9;
+            background: var(--menu-btn-hover);
         }
         
         .error-message {
-            color: #e74c3c;
+            color: var(--danger-color);
             margin-top: 10px;
             display: none;
         }
@@ -126,7 +166,7 @@
         }
         
         .header {
-            background: #2c3e50;
+            background: var(--header-bg);
             color: var(--text-secondary);
             padding: 15px;
             text-align: center;
@@ -139,9 +179,28 @@
             right: 15px;
             display: flex;
             gap: 10px;
+            align-items: center;
         }
         
-        .theme-toggle, .logout-btn {
+        .theme-selector {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+        
+        .theme-selector option {
+            background: var(--header-bg);
+            color: white;
+            padding: 10px;
+        }
+        
+        .logout-btn {
             background: rgba(255,255,255,0.2);
             border: none;
             color: white;
@@ -155,7 +214,7 @@
             gap: 5px;
         }
         
-        .theme-toggle:hover, .logout-btn:hover {
+        .theme-selector:hover, .logout-btn:hover {
             background: rgba(255,255,255,0.3);
         }
         
@@ -172,7 +231,7 @@
         .data-management {
             text-align: center;
             padding: 12px;
-            background: #34495e;
+            background: var(--data-management-bg);
             display: flex;
             justify-content: center;
             gap: 8px;
@@ -180,7 +239,7 @@
         }
         
         .data-btn {
-            background: #27ae60;
+            background: var(--success-color);
             color: white;
             border: none;
             padding: 10px 15px;
@@ -199,11 +258,11 @@
         }
         
         .data-btn.import {
-            background: #3498db;
+            background: var(--menu-btn-bg);
         }
         
         .data-btn.clear {
-            background: #e74c3c;
+            background: var(--danger-color);
         }
         
         .dashboard {
@@ -240,9 +299,9 @@
         }
         
         .balance-card.total-capital {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            background: linear-gradient(135deg, var(--success-color), #2ecc71);
             color: white;
-            border: 2px solid #27ae60;
+            border: 2px solid var(--success-color);
         }
         
         .balance-card.total-capital h3 {
@@ -302,7 +361,7 @@
         }
         
         .menu-btn {
-            background: #3498db;
+            background: var(--menu-btn-bg);
             color: white;
             border: none;
             padding: 15px 10px;
@@ -320,7 +379,7 @@
         }
         
         .menu-btn:hover {
-            background: #2980b9;
+            background: var(--menu-btn-hover);
             transform: translateY(-2px);
         }
         
@@ -398,16 +457,16 @@
             font-size: 11px;
         }
         
-        .type-deposit { background: #27ae60; color: white; }
+        .type-deposit { background: var(--success-color); color: white; }
         .type-family { background: #2980b9; color: white; }
         .type-repay { background: #e67e22; color: white; }
         .type-rent { background: #9b59b6; color: white; }
-        .type-misc { background: #e74c3c; color: white; }
-        .type-loan { background: #f39c12; color: white; }
+        .type-misc { background: var(--danger-color); color: white; }
+        .type-loan { background: var(--warning-color); color: white; }
         .type-fd { background: #16a085; color: white; }
         .type-investment { background: #8e44ad; color: white; }
         .type-loan-given { background: #d35400; color: white; }
-        .type-loan-return { background: #27ae60; color: white; }
+        .type-loan-return { background: var(--success-color); color: white; }
         
         .btn-group {
             display: flex;
@@ -429,15 +488,15 @@
         }
         
         .btn-primary {
-            background: #3498db;
+            background: var(--menu-btn-bg);
         }
         
         .btn-danger {
-            background: #e74c3c;
+            background: var(--danger-color);
         }
         
         .btn-success {
-            background: #27ae60;
+            background: var(--success-color);
         }
         
         .repay-options, .fd-options, .investment-options, .loan-given-options {
@@ -450,9 +509,9 @@
         .repay-option-btn, .fd-option-btn, .investment-option-btn, .loan-given-option-btn {
             flex: 1;
             padding: 10px;
-            border: 2px solid #3498db;
+            border: 2px solid var(--menu-btn-bg);
             background: var(--input-bg);
-            color: #3498db;
+            color: var(--menu-btn-bg);
             border-radius: 5px;
             cursor: pointer;
             min-height: 44px;
@@ -461,7 +520,7 @@
         }
         
         .repay-option-btn.active, .fd-option-btn.active, .investment-option-btn.active, .loan-given-option-btn.active {
-            background: #3498db;
+            background: var(--menu-btn-bg);
             color: white;
         }
         
@@ -518,11 +577,11 @@
         }
 
         .alert-success {
-            background: #27ae60;
+            background: var(--success-color);
         }
 
         .alert-error {
-            background: #e74c3c;
+            background: var(--danger-color);
         }
 
         @keyframes slideIn {
@@ -547,7 +606,7 @@
         .footer {
             text-align: center;
             padding: 20px;
-            background: #2c3e50;
+            background: var(--header-bg);
             color: white;
             margin-top: 20px;
             border-radius: 0 0 15px 15px;
@@ -581,6 +640,10 @@
                 justify-content: center;
                 margin-top: 10px;
                 gap: 8px;
+            }
+            
+            .theme-selector {
+                min-width: 120px;
             }
             
             .data-management {
@@ -705,9 +768,13 @@
         <div class="container">
             <div class="header">
                 <div class="header-controls">
-                    <button class="theme-toggle" id="themeToggle">
-                        <span>🌙</span> Dark Mode
-                    </button>
+                    <select class="theme-selector" id="themeSelector">
+                        <option value="default">🎨 Blue Theme</option>
+                        <option value="green">🎨 Green Theme</option>
+                        <option value="orange">🎨 Orange Theme</option>
+                        <option value="red">🎨 Red Theme</option>
+                        <option value="dark">🎨 Dark Theme</option>
+                    </select>
                     <button class="logout-btn" id="logoutBtn">
                         <span>🚪</span> Logout
                     </button>
@@ -756,7 +823,7 @@
                         <h3>Loans Given</h3>
                         <div class="amount" id="loansGivenBalance">₹0.00</div>
                     </div>
-                    <!-- NEW: Total Capital Balance Card -->
+                    <!-- Total Capital Balance Card -->
                     <div class="balance-card total-capital">
                         <h3>💰 Total Capital Balance</h3>
                         <div class="amount" id="totalCapitalBalance">₹0.00</div>
@@ -787,7 +854,7 @@
             </div>
         </div>
 
-        <!-- All your existing modals remain the same -->
+        <!-- All modals remain the same as before -->
         <!-- Add Balance Modal -->
         <div class="modal" id="addBalanceModal">
             <div class="modal-content">
@@ -1099,26 +1166,19 @@
             }
         });
 
-        // Dark mode functionality
-        const themeToggle = document.getElementById('themeToggle');
+        // Theme selector functionality
+        const themeSelector = document.getElementById('themeSelector');
         const body = document.body;
 
         // Check for saved theme preference
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            body.classList.add('dark-mode');
-            themeToggle.innerHTML = '<span>☀️</span> Light Mode';
-        }
+        const savedTheme = localStorage.getItem('appTheme') || 'default';
+        body.className = `theme-${savedTheme}`;
+        themeSelector.value = savedTheme;
 
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            
-            if (body.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
-                themeToggle.innerHTML = '<span>☀️</span> Light Mode';
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
-                themeToggle.innerHTML = '<span>🌙</span> Dark Mode';
-            }
+        themeSelector.addEventListener('change', function() {
+            const selectedTheme = this.value;
+            body.className = `theme-${selectedTheme}`;
+            localStorage.setItem('appTheme', selectedTheme);
         });
 
         // Add shake animation for login error
@@ -1142,13 +1202,13 @@
             miscBalance: 0,
             fdBalance: 0,
             investmentBalance: 0,
-            loansGiven: 0, // NEW: Loans given to friends/others
+            loansGiven: 0,
             transactions: []
         };
 
         let financeChart = null;
 
-        // NEW: Calculate Total Capital Balance
+        // Calculate Total Capital Balance
         function calculateTotalCapital() {
             return financeData.availableBalance + 
                    financeData.fdBalance + 
@@ -1174,7 +1234,7 @@
             return '₹' + amount.toFixed(2);
         }
 
-        // Calculate total money (for all categories including loans given)
+        // Calculate total money
         function getTotalMoney() {
             return financeData.availableBalance + 
                    financeData.familyBalance + 
@@ -1182,21 +1242,19 @@
                    financeData.investmentBalance +
                    financeData.rentBalance +
                    financeData.miscBalance +
-                   financeData.loansGiven; // NEW: Include loans given
+                   financeData.loansGiven;
         }
 
-        // Update pie chart - NOW INCLUDES LOANS GIVEN
+        // Update pie chart
         function updateChart() {
             const ctx = document.getElementById('financeChart').getContext('2d');
             const totalMoney = getTotalMoney();
             
-            // Destroy existing chart if it exists
             if (financeChart) {
                 financeChart.destroy();
             }
 
             if (totalMoney === 0) {
-                // Create a message instead of chart
                 const chartCanvas = document.getElementById('financeChart');
                 chartCanvas.innerHTML = '<div class="no-data">Add money to see distribution chart</div>';
                 return;
@@ -1210,7 +1268,7 @@
                     'Investments',
                     'Rent Balance',
                     'Miscellaneous',
-                    'Loans Given' // NEW: Added to chart
+                    'Loans Given'
                 ],
                 datasets: [{
                     data: [
@@ -1220,16 +1278,16 @@
                         financeData.investmentBalance,
                         financeData.rentBalance,
                         financeData.miscBalance,
-                        financeData.loansGiven // NEW: Added to chart data
+                        financeData.loansGiven
                     ],
                     backgroundColor: [
-                        '#3498db', // Available - Blue
-                        '#2980b9', // Family - Dark Blue
-                        '#16a085', // FD - Teal
-                        '#8e44ad', // Investments - Purple
-                        '#9b59b6', // Rent - Light Purple
-                        '#e74c3c', // Miscellaneous - Red
-                        '#d35400'  // NEW: Loans Given - Orange
+                        '#3498db',
+                        '#2980b9',
+                        '#16a085',
+                        '#8e44ad',
+                        '#9b59b6',
+                        '#e74c3c',
+                        '#d35400'
                     ],
                     borderColor: '#ffffff',
                     borderWidth: 2,
@@ -1276,7 +1334,7 @@
             });
         }
 
-        // NEW: Loans Given management options
+        // Loans Given management options
         function showLoanGivenOption(option) {
             const giveSection = document.getElementById('giveLoanSection');
             const receiveSection = document.getElementById('receiveLoanSection');
@@ -1296,7 +1354,7 @@
             }
         }
 
-        // NEW: Give loan to someone
+        // Give loan to someone
         function giveLoan() {
             const amount = parseFloat(document.getElementById('loanGivenAmount').value);
             const personName = document.getElementById('loanPersonName').value;
@@ -1324,7 +1382,7 @@
             }
         }
 
-        // NEW: Receive loan return from someone
+        // Receive loan return from someone
         function receiveLoanReturn() {
             const amount = parseFloat(document.getElementById('loanReturnAmount').value);
             const personName = document.getElementById('loanReturnPerson').value;
@@ -1381,7 +1439,6 @@
                         
                         if (importedData.availableBalance !== undefined) {
                             if (confirm('This will replace your current data. Continue?')) {
-                                // Ensure loansGiven exists in imported data
                                 if (importedData.loansGiven === undefined) {
                                     importedData.loansGiven = 0;
                                 }
@@ -1415,7 +1472,7 @@
                         miscBalance: 0,
                         fdBalance: 0,
                         investmentBalance: 0,
-                        loansGiven: 0, // NEW: Reset loans given
+                        loansGiven: 0,
                         transactions: []
                     };
                     saveData();
@@ -1429,7 +1486,6 @@
             const saved = localStorage.getItem('financeData');
             if (saved) {
                 financeData = JSON.parse(saved);
-                // Ensure loansGiven exists in old data
                 if (financeData.loansGiven === undefined) {
                     financeData.loansGiven = 0;
                 }
@@ -1445,7 +1501,7 @@
             updateChart();
         }
 
-        // Update display - NOW INCLUDES TOTAL CAPITAL
+        // Update display
         function updateDisplay() {
             document.getElementById('availableBalance').textContent = formatCurrency(financeData.availableBalance);
             document.getElementById('familyBalance').textContent = formatCurrency(financeData.familyBalance);
@@ -1454,8 +1510,7 @@
             document.getElementById('miscBalance').textContent = formatCurrency(financeData.miscBalance);
             document.getElementById('fdBalance').textContent = formatCurrency(financeData.fdBalance);
             document.getElementById('investmentBalance').textContent = formatCurrency(financeData.investmentBalance);
-            document.getElementById('loansGivenBalance').textContent = formatCurrency(financeData.loansGiven); // NEW: Display loans given
-            // NEW: Display Total Capital Balance
+            document.getElementById('loansGivenBalance').textContent = formatCurrency(financeData.loansGiven);
             document.getElementById('totalCapitalBalance').textContent = formatCurrency(calculateTotalCapital());
         }
 
@@ -1814,7 +1869,7 @@
                 const typeClass = `type-${transaction.type.toLowerCase().replace('_', '-')}`;
                 const isPositive = transaction.type === 'DEPOSIT' || transaction.type === 'NEW_LOAN' || 
                                  transaction.type === 'FD_BREAK' || transaction.type === 'INVESTMENT_WITHDRAW' ||
-                                 transaction.type === 'LOAN_RETURN'; // NEW: Loan returns are positive
+                                 transaction.type === 'LOAN_RETURN';
                 
                 item.innerHTML = `
                     <div style="flex: 1;">
