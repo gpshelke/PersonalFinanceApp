@@ -239,6 +239,23 @@
             color: var(--text-primary);
         }
         
+        .balance-card.total-capital {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: 2px solid #27ae60;
+        }
+        
+        .balance-card.total-capital h3 {
+            color: white;
+            font-size: 12px;
+        }
+        
+        .balance-card.total-capital .amount {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
         .balance-card h3 {
             color: #7f8c8d;
             font-size: 11px;
@@ -258,8 +275,8 @@
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 5px var(--shadow);
-            height: 280px;
-            min-height: 280px;
+            height: 320px;
+            min-height: 320px;
             position: relative;
         }
         
@@ -389,6 +406,8 @@
         .type-loan { background: #f39c12; color: white; }
         .type-fd { background: #16a085; color: white; }
         .type-investment { background: #8e44ad; color: white; }
+        .type-loan-given { background: #d35400; color: white; }
+        .type-loan-return { background: #27ae60; color: white; }
         
         .btn-group {
             display: flex;
@@ -421,14 +440,14 @@
             background: #27ae60;
         }
         
-        .repay-options, .fd-options, .investment-options {
+        .repay-options, .fd-options, .investment-options, .loan-given-options {
             display: flex;
             gap: 8px;
             margin-bottom: 15px;
             flex-wrap: wrap;
         }
         
-        .repay-option-btn, .fd-option-btn, .investment-option-btn {
+        .repay-option-btn, .fd-option-btn, .investment-option-btn, .loan-given-option-btn {
             flex: 1;
             padding: 10px;
             border: 2px solid #3498db;
@@ -441,7 +460,7 @@
             font-size: 14px;
         }
         
-        .repay-option-btn.active, .fd-option-btn.active, .investment-option-btn.active {
+        .repay-option-btn.active, .fd-option-btn.active, .investment-option-btn.active, .loan-given-option-btn.active {
             background: #3498db;
             color: white;
         }
@@ -463,6 +482,16 @@
         
         .investment-option-btn.active {
             background: #8e44ad;
+            color: white;
+        }
+
+        .loan-given-option-btn {
+            border-color: #d35400;
+            color: #d35400;
+        }
+
+        .loan-given-option-btn.active {
+            background: #d35400;
             color: white;
         }
 
@@ -588,10 +617,14 @@
                 font-size: 14px;
             }
             
+            .balance-card.total-capital .amount {
+                font-size: 16px;
+            }
+            
             .chart-container {
                 padding: 12px;
-                height: 250px;
-                min-height: 250px;
+                height: 280px;
+                min-height: 280px;
             }
             
             .menu {
@@ -622,11 +655,11 @@
                 width: 100%;
             }
             
-            .repay-options, .fd-options, .investment-options {
+            .repay-options, .fd-options, .investment-options, .loan-given-options {
                 flex-direction: column;
             }
             
-            .repay-option-btn, .fd-option-btn, .investment-option-btn {
+            .repay-option-btn, .fd-option-btn, .investment-option-btn, .loan-given-option-btn {
                 width: 100%;
             }
             
@@ -719,10 +752,19 @@
                         <h3>Investments</h3>
                         <div class="amount" id="investmentBalance">₹0.00</div>
                     </div>
+                    <div class="balance-card">
+                        <h3>Loans Given</h3>
+                        <div class="amount" id="loansGivenBalance">₹0.00</div>
+                    </div>
+                    <!-- NEW: Total Capital Balance Card -->
+                    <div class="balance-card total-capital">
+                        <h3>💰 Total Capital Balance</h3>
+                        <div class="amount" id="totalCapitalBalance">₹0.00</div>
+                    </div>
                 </div>
                 
                 <div class="chart-container">
-                    <div class="chart-title">Money Distribution</div>
+                    <div class="chart-title">Complete Money Distribution</div>
                     <canvas id="financeChart"></canvas>
                 </div>
             </div>
@@ -735,6 +777,7 @@
                 <button class="menu-btn" onclick="showModal('miscModal')">Miscellaneous</button>
                 <button class="menu-btn" onclick="showModal('fdModal')" style="background: #16a085;">Fixed Deposit</button>
                 <button class="menu-btn" onclick="showModal('investmentModal')" style="background: #8e44ad;">Investments</button>
+                <button class="menu-btn" onclick="showModal('loanGivenModal')" style="background: #d35400;">Loans Given</button>
                 <button class="menu-btn" onclick="showHistory()">Transaction History</button>
             </div>
 
@@ -941,6 +984,55 @@
             </div>
         </div>
 
+        <!-- Loans Given Modal -->
+        <div class="modal" id="loanGivenModal">
+            <div class="modal-content">
+                <h2>Loans Given Management</h2>
+                <div class="loan-given-options">
+                    <button class="loan-given-option-btn active" onclick="showLoanGivenOption('give')">Give Loan</button>
+                    <button class="loan-given-option-btn" onclick="showLoanGivenOption('receive')">Receive Return</button>
+                </div>
+                
+                <div id="giveLoanSection">
+                    <div class="form-group">
+                        <label>Loan Amount (₹):</label>
+                        <input type="number" id="loanGivenAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Person's Name:</label>
+                        <input type="text" id="loanPersonName" placeholder="e.g., John, Friend, Relative">
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <input type="text" id="loanGivenDesc" placeholder="e.g., Emergency loan, Personal loan">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" onclick="giveLoan()">Give Loan</button>
+                        <button class="btn-danger" onclick="hideModal('loanGivenModal')">Cancel</button>
+                    </div>
+                </div>
+                
+                <div id="receiveLoanSection" style="display: none;">
+                    <div class="form-group">
+                        <label>Amount Received (₹):</label>
+                        <input type="number" id="loanReturnAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>From Person:</label>
+                        <input type="text" id="loanReturnPerson" placeholder="e.g., John, Friend, Relative">
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <input type="text" id="loanReturnDesc" placeholder="e.g., Loan returned, Partial payment">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-success" onclick="receiveLoanReturn()">Receive Return</button>
+                        <button class="btn-danger" onclick="hideModal('loanGivenModal')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Transaction History Modal -->
         <div class="modal" id="historyModal">
             <div class="modal-content">
@@ -1050,10 +1142,20 @@
             miscBalance: 0,
             fdBalance: 0,
             investmentBalance: 0,
+            loansGiven: 0, // NEW: Loans given to friends/others
             transactions: []
         };
 
         let financeChart = null;
+
+        // NEW: Calculate Total Capital Balance
+        function calculateTotalCapital() {
+            return financeData.availableBalance + 
+                   financeData.fdBalance + 
+                   financeData.investmentBalance + 
+                   financeData.loansGiven - 
+                   financeData.repayAmount;
+        }
 
         // Show custom alert
         function showAlert(message, type = 'success') {
@@ -1072,15 +1174,18 @@
             return '₹' + amount.toFixed(2);
         }
 
-        // Calculate total money
+        // Calculate total money (for all categories including loans given)
         function getTotalMoney() {
             return financeData.availableBalance + 
                    financeData.familyBalance + 
                    financeData.fdBalance + 
-                   financeData.investmentBalance;
+                   financeData.investmentBalance +
+                   financeData.rentBalance +
+                   financeData.miscBalance +
+                   financeData.loansGiven; // NEW: Include loans given
         }
 
-        // Update pie chart
+        // Update pie chart - NOW INCLUDES LOANS GIVEN
         function updateChart() {
             const ctx = document.getElementById('financeChart').getContext('2d');
             const totalMoney = getTotalMoney();
@@ -1102,20 +1207,29 @@
                     'Available Balance',
                     'Family Balance', 
                     'Fixed Deposit',
-                    'Investments'
+                    'Investments',
+                    'Rent Balance',
+                    'Miscellaneous',
+                    'Loans Given' // NEW: Added to chart
                 ],
                 datasets: [{
                     data: [
                         financeData.availableBalance,
                         financeData.familyBalance,
                         financeData.fdBalance,
-                        financeData.investmentBalance
+                        financeData.investmentBalance,
+                        financeData.rentBalance,
+                        financeData.miscBalance,
+                        financeData.loansGiven // NEW: Added to chart data
                     ],
                     backgroundColor: [
                         '#3498db', // Available - Blue
                         '#2980b9', // Family - Dark Blue
                         '#16a085', // FD - Teal
-                        '#8e44ad'  // Investments - Purple
+                        '#8e44ad', // Investments - Purple
+                        '#9b59b6', // Rent - Light Purple
+                        '#e74c3c', // Miscellaneous - Red
+                        '#d35400'  // NEW: Loans Given - Orange
                     ],
                     borderColor: '#ffffff',
                     borderWidth: 2,
@@ -1130,11 +1244,11 @@
                     legend: {
                         position: 'bottom',
                         labels: {
-                            padding: 20,
+                            padding: 15,
                             usePointStyle: true,
                             pointStyle: 'circle',
                             font: {
-                                size: window.innerWidth < 480 ? 10 : 12
+                                size: window.innerWidth < 480 ? 9 : 11
                             }
                         }
                     },
@@ -1160,6 +1274,82 @@
                 data: data,
                 options: options
             });
+        }
+
+        // NEW: Loans Given management options
+        function showLoanGivenOption(option) {
+            const giveSection = document.getElementById('giveLoanSection');
+            const receiveSection = document.getElementById('receiveLoanSection');
+            const giveBtn = document.querySelectorAll('.loan-given-option-btn')[0];
+            const receiveBtn = document.querySelectorAll('.loan-given-option-btn')[1];
+            
+            if (option === 'give') {
+                giveSection.style.display = 'block';
+                receiveSection.style.display = 'none';
+                giveBtn.classList.add('active');
+                receiveBtn.classList.remove('active');
+            } else {
+                giveSection.style.display = 'none';
+                receiveSection.style.display = 'block';
+                giveBtn.classList.remove('active');
+                receiveBtn.classList.add('active');
+            }
+        }
+
+        // NEW: Give loan to someone
+        function giveLoan() {
+            const amount = parseFloat(document.getElementById('loanGivenAmount').value);
+            const personName = document.getElementById('loanPersonName').value;
+            const description = document.getElementById('loanGivenDesc').value;
+            
+            if (amount > 0 && personName) {
+                if (amount <= financeData.availableBalance) {
+                    financeData.availableBalance -= amount;
+                    financeData.loansGiven += amount;
+                    financeData.transactions.push({
+                        type: 'LOAN_GIVEN',
+                        amount: amount,
+                        description: `Loan to ${personName}: ${description || 'Personal loan'}`,
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('loanGivenModal');
+                    showAlert(`✅ Successfully gave loan of ${formatCurrency(amount)} to ${personName}!`);
+                } else {
+                    showAlert('❌ Insufficient available balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please fill all required fields', 'error');
+            }
+        }
+
+        // NEW: Receive loan return from someone
+        function receiveLoanReturn() {
+            const amount = parseFloat(document.getElementById('loanReturnAmount').value);
+            const personName = document.getElementById('loanReturnPerson').value;
+            const description = document.getElementById('loanReturnDesc').value;
+            
+            if (amount > 0 && personName) {
+                if (amount <= financeData.loansGiven) {
+                    financeData.loansGiven -= amount;
+                    financeData.availableBalance += amount;
+                    financeData.transactions.push({
+                        type: 'LOAN_RETURN',
+                        amount: amount,
+                        description: `Loan return from ${personName}: ${description || 'Loan returned'}`,
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('loanGivenModal');
+                    showAlert(`✅ Successfully received ${formatCurrency(amount)} loan return from ${personName}!`);
+                } else {
+                    showAlert('❌ Amount exceeds total loans given!', 'error');
+                }
+            } else {
+                showAlert('❌ Please fill all required fields', 'error');
+            }
         }
 
         // Export data to JSON file
@@ -1191,6 +1381,10 @@
                         
                         if (importedData.availableBalance !== undefined) {
                             if (confirm('This will replace your current data. Continue?')) {
+                                // Ensure loansGiven exists in imported data
+                                if (importedData.loansGiven === undefined) {
+                                    importedData.loansGiven = 0;
+                                }
                                 financeData = importedData;
                                 saveData();
                                 showAlert('✅ Data imported successfully!');
@@ -1221,6 +1415,7 @@
                         miscBalance: 0,
                         fdBalance: 0,
                         investmentBalance: 0,
+                        loansGiven: 0, // NEW: Reset loans given
                         transactions: []
                     };
                     saveData();
@@ -1234,6 +1429,10 @@
             const saved = localStorage.getItem('financeData');
             if (saved) {
                 financeData = JSON.parse(saved);
+                // Ensure loansGiven exists in old data
+                if (financeData.loansGiven === undefined) {
+                    financeData.loansGiven = 0;
+                }
             }
             updateDisplay();
             updateChart();
@@ -1246,7 +1445,7 @@
             updateChart();
         }
 
-        // Update display
+        // Update display - NOW INCLUDES TOTAL CAPITAL
         function updateDisplay() {
             document.getElementById('availableBalance').textContent = formatCurrency(financeData.availableBalance);
             document.getElementById('familyBalance').textContent = formatCurrency(financeData.familyBalance);
@@ -1255,6 +1454,9 @@
             document.getElementById('miscBalance').textContent = formatCurrency(financeData.miscBalance);
             document.getElementById('fdBalance').textContent = formatCurrency(financeData.fdBalance);
             document.getElementById('investmentBalance').textContent = formatCurrency(financeData.investmentBalance);
+            document.getElementById('loansGivenBalance').textContent = formatCurrency(financeData.loansGiven); // NEW: Display loans given
+            // NEW: Display Total Capital Balance
+            document.getElementById('totalCapitalBalance').textContent = formatCurrency(calculateTotalCapital());
         }
 
         // Modal functions
@@ -1611,7 +1813,8 @@
                 
                 const typeClass = `type-${transaction.type.toLowerCase().replace('_', '-')}`;
                 const isPositive = transaction.type === 'DEPOSIT' || transaction.type === 'NEW_LOAN' || 
-                                 transaction.type === 'FD_BREAK' || transaction.type === 'INVESTMENT_WITHDRAW';
+                                 transaction.type === 'FD_BREAK' || transaction.type === 'INVESTMENT_WITHDRAW' ||
+                                 transaction.type === 'LOAN_RETURN'; // NEW: Loan returns are positive
                 
                 item.innerHTML = `
                     <div style="flex: 1;">
