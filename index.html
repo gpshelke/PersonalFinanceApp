@@ -299,9 +299,44 @@
         }
         
         .balance-card.total-capital {
-            background: linear-gradient(135deg, var(--success-color), #2ecc71);
             color: white;
-            border: 2px solid var(--success-color);
+            border: 2px solid;
+            transition: all 0.5s ease;
+        }
+        
+        .balance-card.total-capital.negative {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-color: #c0392b;
+        }
+        
+        .balance-card.total-capital.low {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            border-color: #ee5a52;
+        }
+        
+        .balance-card.total-capital.medium-low {
+            background: linear-gradient(135deg, #ffa726, #ff9800);
+            border-color: #ff9800;
+        }
+        
+        .balance-card.total-capital.medium {
+            background: linear-gradient(135deg, #ffd54f, #ffc107);
+            border-color: #ffc107;
+        }
+        
+        .balance-card.total-capital.medium-high {
+            background: linear-gradient(135deg, #a5d6a7, #66bb6a);
+            border-color: #66bb6a;
+        }
+        
+        .balance-card.total-capital.high {
+            background: linear-gradient(135deg, #66bb6a, #4caf50);
+            border-color: #4caf50;
+        }
+        
+        .balance-card.total-capital.very-high {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            border-color: #2e7d32;
         }
         
         .balance-card.total-capital h3 {
@@ -824,7 +859,7 @@
                         <div class="amount" id="loansGivenBalance">₹0.00</div>
                     </div>
                     <!-- Total Capital Balance Card -->
-                    <div class="balance-card total-capital">
+                    <div class="balance-card total-capital" id="totalCapitalCard">
                         <h3>💰 Total Capital Balance</h3>
                         <div class="amount" id="totalCapitalBalance">₹0.00</div>
                     </div>
@@ -1217,6 +1252,32 @@
                    financeData.repayAmount;
         }
 
+        // Update Total Capital Card Color based on amount
+        function updateTotalCapitalColor() {
+            const totalCapital = calculateTotalCapital();
+            const totalCapitalCard = document.getElementById('totalCapitalCard');
+            
+            // Remove all color classes
+            totalCapitalCard.classList.remove('negative', 'low', 'medium-low', 'medium', 'medium-high', 'high', 'very-high');
+            
+            // Add appropriate color class based on amount
+            if (totalCapital <= 0) {
+                totalCapitalCard.classList.add('negative');
+            } else if (totalCapital > 0 && totalCapital <= 1000) {
+                totalCapitalCard.classList.add('low');
+            } else if (totalCapital > 1000 && totalCapital <= 2500) {
+                totalCapitalCard.classList.add('medium-low');
+            } else if (totalCapital > 2500 && totalCapital <= 5000) {
+                totalCapitalCard.classList.add('medium');
+            } else if (totalCapital > 5000 && totalCapital <= 7500) {
+                totalCapitalCard.classList.add('medium-high');
+            } else if (totalCapital > 7500 && totalCapital < 10000) {
+                totalCapitalCard.classList.add('high');
+            } else {
+                totalCapitalCard.classList.add('very-high');
+            }
+        }
+
         // Show custom alert
         function showAlert(message, type = 'success') {
             const alertDiv = document.createElement('div');
@@ -1512,6 +1573,9 @@
             document.getElementById('investmentBalance').textContent = formatCurrency(financeData.investmentBalance);
             document.getElementById('loansGivenBalance').textContent = formatCurrency(financeData.loansGiven);
             document.getElementById('totalCapitalBalance').textContent = formatCurrency(calculateTotalCapital());
+            
+            // Update the color of total capital card
+            updateTotalCapitalColor();
         }
 
         // Modal functions
