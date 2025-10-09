@@ -382,6 +382,147 @@
             font-size: 1.1rem;
         }
         
+        /* Financial Analysis Styles */
+        .analysis-dashboard {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+        
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .health-score {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(#4CAF50 0% 0%, #e0e0e0 0% 100%);
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            position: relative;
+        }
+        
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+        }
+        
+        .score-circle span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .analysis-card {
+            background: var(--card-bg);
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid;
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+        
+        .analysis-card.good {
+            border-left-color: #27ae60;
+            background: linear-gradient(135deg, var(--card-bg), #e8f5e8);
+        }
+        
+        .analysis-card.warning {
+            border-left-color: #f39c12;
+            background: linear-gradient(135deg, var(--card-bg), #fff9e6);
+        }
+        
+        .analysis-card.danger {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, var(--card-bg), #ffe6e6);
+        }
+        
+        .analysis-card h4 {
+            font-size: 12px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        .analysis-card .value {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .analysis-card .status {
+            font-size: 11px;
+            color: #7f8c8d;
+        }
+        
+        .recommendations {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .recommendations h4 {
+            margin-bottom: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .tips-list {
+            padding-left: 20px;
+        }
+        
+        .tips-list li {
+            margin-bottom: 8px;
+            font-size: 12px;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
+        
+        .refresh-btn {
+            background: var(--menu-btn-bg);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-btn:hover {
+            background: var(--menu-btn-hover);
+        }
+
         .menu {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -496,7 +637,8 @@
         .type-family { background: #2980b9; color: white; }
         .type-repay { background: #e67e22; color: white; }
         .type-rent { background: #9b59b6; color: white; }
-        .type-misc { background: var(--danger-color); color: white; }
+        .type-wrong-exp { background: #e74c3c; color: white; }
+        .type-other-imp-exp { background: #95a5a6; color: white; }
         .type-loan { background: var(--warning-color); color: white; }
         .type-fd { background: #16a085; color: white; }
         .type-investment { background: #8e44ad; color: white; }
@@ -725,6 +867,10 @@
                 min-height: 280px;
             }
             
+            .analysis-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            
             .menu {
                 padding: 10px;
                 gap: 8px;
@@ -772,6 +918,10 @@
                 grid-template-columns: 1fr 1fr;
             }
             
+            .analysis-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
             .menu-btn {
                 font-size: 12px;
                 padding: 10px 5px;
@@ -815,7 +965,7 @@
                     </button>
                 </div>
                 <h1>💰 Finance Manager</h1>
-                <p>This App Is Effective from 06/10/2025</p>
+                <p>This App is effective since 07/10/2025</p>
             </div>
             
             <div class="data-management">
@@ -825,49 +975,101 @@
             </div>
             
             <div class="dashboard">
-                <div class="balances">
-                    <div class="balance-card">
-                        <h3>Available Balance</h3>
-                        <div class="amount" id="availableBalance">₹0.00</div>
+                <!-- Left Column: Balances and Chart -->
+                <div>
+                    <div class="balances">
+                        <div class="balance-card">
+                            <h3>Available Balance</h3>
+                            <div class="amount" id="availableBalance">₹0.00</div>
+                        </div>
+                        <div class="balance-card">
+                            <h3>Family Balance</h3>
+                            <div class="amount" id="familyBalance">₹0.00</div>
+                        </div>
+                        <div class="balance-card">
+                            <h3>Repay Amount</h3>
+                            <div class="amount" id="repayAmount">₹0.00</div>
+                        </div>
+                        <div class="balance-card">
+                            <h3>Rent Balance</h3>
+                            <div class="amount" id="rentBalance">₹0.00</div>
+                        </div>
+                        <div class="balance-card">
+                            <h3>Wrong Expenditure</h3>
+                            <div class="amount" id="wrongExpBalance">₹0.00</div>
+                        </div>
+                        <div class="balance-card">
+                            <h3>Other Important Exp</h3>
+                            <div class="amount" id="otherImpExpBalance">₹0.00</div>
+                        </div>
+                        <div class="balance-card">
+                            <h3>Fixed Deposit</h3>
+                            <div class="amount" id="fdBalance">₹0.00</div>
+                        </div>
+                        <div class="balance-card">
+                            <h3>Investments</h3>
+                            <div class="amount" id="investmentBalance">₹0.00</div>
+                        </div>
+                        <div class="balance-card">
+                            <h3>Loans Given</h3>
+                            <div class="amount" id="loansGivenBalance">₹0.00</div>
+                        </div>
+                        <!-- Total Capital Balance Card -->
+                        <div class="balance-card total-capital" id="totalCapitalCard">
+                            <h3>💰 Total Capital Balance</h3>
+                            <div class="amount" id="totalCapitalBalance">₹0.00</div>
+                        </div>
                     </div>
-                    <div class="balance-card">
-                        <h3>Family Balance</h3>
-                        <div class="amount" id="familyBalance">₹0.00</div>
-                    </div>
-                    <div class="balance-card">
-                        <h3>Repay Amount</h3>
-                        <div class="amount" id="repayAmount">₹0.00</div>
-                    </div>
-                    <div class="balance-card">
-                        <h3>Rent Balance</h3>
-                        <div class="amount" id="rentBalance">₹0.00</div>
-                    </div>
-                    <div class="balance-card">
-                        <h3>Miscellaneous</h3>
-                        <div class="amount" id="miscBalance">₹0.00</div>
-                    </div>
-                    <div class="balance-card">
-                        <h3>Fixed Deposit</h3>
-                        <div class="amount" id="fdBalance">₹0.00</div>
-                    </div>
-                    <div class="balance-card">
-                        <h3>Investments</h3>
-                        <div class="amount" id="investmentBalance">₹0.00</div>
-                    </div>
-                    <div class="balance-card">
-                        <h3>Loans Given</h3>
-                        <div class="amount" id="loansGivenBalance">₹0.00</div>
-                    </div>
-                    <!-- Total Capital Balance Card -->
-                    <div class="balance-card total-capital" id="totalCapitalCard">
-                        <h3>💰 Total Capital Balance</h3>
-                        <div class="amount" id="totalCapitalBalance">₹0.00</div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-title">Complete Money Distribution</div>
+                        <canvas id="financeChart"></canvas>
                     </div>
                 </div>
                 
-                <div class="chart-container">
-                    <div class="chart-title">Complete Money Distribution</div>
-                    <canvas id="financeChart"></canvas>
+                <!-- Right Column: Financial Analysis -->
+                <div class="analysis-dashboard">
+                    <div class="analysis-header">
+                        <h3>📊 Financial Health Analysis</h3>
+                        <button class="refresh-btn" onclick="updateAnalysis()">🔄 Refresh</button>
+                    </div>
+                    
+                    <div class="health-score">
+                        <div class="score-circle" id="scoreCircle">
+                            <span>0</span>
+                        </div>
+                        <p id="scoreMessage">Add money to see analysis</p>
+                    </div>
+                    
+                    <div class="analysis-grid" id="analysisGrid">
+                        <div class="analysis-card">
+                            <h4>Wrong Expenses</h4>
+                            <div class="value">0%</div>
+                            <div class="status">Add data</div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>Investments</h4>
+                            <div class="value">0%</div>
+                            <div class="status">Add data</div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>Emergency Fund</h4>
+                            <div class="value">0%</div>
+                            <div class="status">Add data</div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>Debt Ratio</h4>
+                            <div class="value">0%</div>
+                            <div class="status">Add data</div>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h4>💡 Financial Recommendations</h4>
+                        <ul class="tips-list" id="recommendationsList">
+                            <li>Start by adding your income and expenses to get personalized advice</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             
@@ -876,7 +1078,8 @@
                 <button class="menu-btn" onclick="showModal('familyModal')">Send to Family</button>
                 <button class="menu-btn" onclick="showModal('repayModal')">Repay Management</button>
                 <button class="menu-btn" onclick="showModal('rentModal')">Pay Rent</button>
-                <button class="menu-btn" onclick="showModal('miscModal')">Miscellaneous</button>
+                <button class="menu-btn" onclick="showModal('wrongExpModal')" style="background: #e74c3c;">Wrong Expenditure</button>
+                <button class="menu-btn" onclick="showModal('otherImpExpModal')" style="background: #95a5a6;">Other Important Exp</button>
                 <button class="menu-btn" onclick="showModal('fdModal')" style="background: #16a085;">Fixed Deposit</button>
                 <button class="menu-btn" onclick="showModal('investmentModal')" style="background: #8e44ad;">Investments</button>
                 <button class="menu-btn" onclick="showModal('loanGivenModal')" style="background: #d35400;">Loans Given</button>
@@ -889,7 +1092,7 @@
             </div>
         </div>
 
-        <!-- All modals remain the same as before -->
+        <!-- All modals -->
         <!-- Add Balance Modal -->
         <div class="modal" id="addBalanceModal">
             <div class="modal-content">
@@ -972,21 +1175,40 @@
             </div>
         </div>
 
-        <!-- Miscellaneous Modal -->
-        <div class="modal" id="miscModal">
+        <!-- Wrong Expenditure Modal -->
+        <div class="modal" id="wrongExpModal">
             <div class="modal-content">
-                <h2>Miscellaneous Expense</h2>
+                <h2>Wrong Expenditure</h2>
                 <div class="form-group">
                     <label>Amount (₹):</label>
-                    <input type="number" id="miscAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                    <input type="number" id="wrongExpAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
                 </div>
                 <div class="form-group">
                     <label>Description:</label>
-                    <input type="text" id="miscDesc" placeholder="e.g., Food, Shopping, Travel">
+                    <input type="text" id="wrongExpDesc" placeholder="e.g., Gambling, Bad spending, Lost money">
                 </div>
                 <div class="btn-group">
-                    <button class="btn-primary" onclick="addMiscellaneous()">Add Expense</button>
-                    <button class="btn-danger" onclick="hideModal('miscModal')">Cancel</button>
+                    <button class="btn-primary" onclick="addWrongExpenditure()">Add Expense</button>
+                    <button class="btn-danger" onclick="hideModal('wrongExpModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Important Expenses Modal -->
+        <div class="modal" id="otherImpExpModal">
+            <div class="modal-content">
+                <h2>Other Important Expenses</h2>
+                <div class="form-group">
+                    <label>Amount (₹):</label>
+                    <input type="number" id="otherImpExpAmount" placeholder="Enter amount in rupees" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" id="otherImpExpDesc" placeholder="e.g., Medical, Education, Emergency">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="addOtherImportantExpense()">Add Expense</button>
+                    <button class="btn-danger" onclick="hideModal('otherImpExpModal')">Cancel</button>
                 </div>
             </div>
         </div>
@@ -1227,14 +1449,14 @@
         `;
         document.head.appendChild(style);
 
-        // Your existing finance app code continues below...
         // Finance data
         let financeData = {
             availableBalance: 0,
             familyBalance: 0,
             repayAmount: 0,
             rentBalance: 0,
-            miscBalance: 0,
+            wrongExpBalance: 0,
+            otherImpExpBalance: 0,
             fdBalance: 0,
             investmentBalance: 0,
             loansGiven: 0,
@@ -1278,6 +1500,180 @@
             }
         }
 
+        // Financial Analysis Functions
+        function generateFinancialAnalysis() {
+            const totalMoney = getTotalMoney();
+            const totalCapital = calculateTotalCapital();
+            const availableBalance = financeData.availableBalance;
+            const wrongExpenditure = financeData.wrongExpBalance;
+            const otherImportantExp = financeData.otherImpExpBalance;
+            const investments = financeData.investmentBalance;
+            const fixedDeposits = financeData.fdBalance;
+            const loansGiven = financeData.loansGiven;
+            const debt = financeData.repayAmount;
+            
+            let score = 100;
+            const recommendations = [];
+            const metrics = {};
+            
+            // Calculate percentages
+            metrics.wrongExpPercentage = totalMoney > 0 ? (wrongExpenditure / totalMoney) * 100 : 0;
+            metrics.investmentPercentage = totalMoney > 0 ? ((investments + fixedDeposits) / totalMoney) * 100 : 0;
+            metrics.emergencyFundPercentage = totalMoney > 0 ? (availableBalance / totalMoney) * 100 : 0;
+            metrics.debtPercentage = totalCapital > 0 ? (debt / totalCapital) * 100 : 0;
+            metrics.essentialExpPercentage = totalMoney > 0 ? ((financeData.rentBalance + financeData.familyBalance + otherImportantExp) / totalMoney) * 100 : 0;
+            
+            // Analysis 1: Wrong Expenditure
+            if (metrics.wrongExpPercentage > 15) {
+                score -= 25;
+                recommendations.push('🚨 Reduce wrong expenditure - aim for <5%');
+                recommendations.push('Create a budget for discretionary spending');
+            } else if (metrics.wrongExpPercentage > 5) {
+                score -= 10;
+                recommendations.push('⚠️ Control wrong expenditure - currently ' + metrics.wrongExpPercentage.toFixed(1) + '%');
+            } else if (metrics.wrongExpPercentage > 0) {
+                recommendations.push('✅ Good! Wrong expenditure under control');
+            }
+            
+            // Analysis 2: Investment Ratio
+            if (metrics.investmentPercentage >= 30) {
+                recommendations.push('✅ Excellent! Investments at ' + metrics.investmentPercentage.toFixed(1) + '%');
+            } else if (metrics.investmentPercentage >= 15) {
+                score -= 5;
+                recommendations.push('📈 Increase investments to 30%+ for better growth');
+            } else {
+                score -= 15;
+                recommendations.push('💸 Low investments - aim for 30% in growth assets');
+            }
+            
+            // Analysis 3: Emergency Fund
+            if (metrics.emergencyFundPercentage >= 20) {
+                recommendations.push('✅ Strong emergency fund - well prepared!');
+            } else if (metrics.emergencyFundPercentage >= 10) {
+                score -= 5;
+                recommendations.push('💡 Build emergency fund to 20% for safety');
+            } else {
+                score -= 10;
+                recommendations.push('🚨 Priority: Build emergency fund to 20%');
+            }
+            
+            // Analysis 4: Debt Management
+            if (debt > 0) {
+                if (metrics.debtPercentage > 50) {
+                    score -= 20;
+                    recommendations.push('💳 High debt! Focus on repayment as priority');
+                } else if (metrics.debtPercentage > 20) {
+                    score -= 10;
+                    recommendations.push('📉 Manage debt - create repayment plan');
+                } else {
+                    recommendations.push('✅ Debt under control');
+                }
+            } else {
+                recommendations.push('🎉 No debt - excellent position!');
+            }
+            
+            // Analysis 5: Essential Expenses
+            if (metrics.essentialExpPercentage > 60) {
+                score -= 10;
+                recommendations.push('🏠 High essential expenses - review budget');
+            }
+            
+            // Ensure score is between 0-100
+            score = Math.max(0, Math.min(100, score));
+            
+            return {
+                score: Math.round(score),
+                recommendations,
+                metrics
+            };
+        }
+
+        function updateAnalysis() {
+            const analysis = generateFinancialAnalysis();
+            const totalMoney = getTotalMoney();
+            
+            // Update score circle
+            const scoreCircle = document.getElementById('scoreCircle');
+            const scoreMessage = document.getElementById('scoreMessage');
+            
+            scoreCircle.style.background = `conic-gradient(#4CAF50 0% ${analysis.score}%, #e0e0e0 ${analysis.score}% 100%)`;
+            scoreCircle.innerHTML = `<span>${analysis.score}</span>`;
+            scoreMessage.textContent = getScoreMessage(analysis.score);
+            
+            // Update analysis cards
+            const analysisGrid = document.getElementById('analysisGrid');
+            let cardsHTML = '';
+            
+            if (totalMoney === 0) {
+                cardsHTML = `
+                    <div class="analysis-card">
+                        <h4>Start Tracking</h4>
+                        <div class="value">Add Money</div>
+                        <div class="status">Begin your journey</div>
+                    </div>
+                    <div class="analysis-card">
+                        <h4>Investments</h4>
+                        <div class="value">0%</div>
+                        <div class="status">Add data</div>
+                    </div>
+                    <div class="analysis-card">
+                        <h4>Emergency Fund</h4>
+                        <div class="value">0%</div>
+                        <div class="status">Add data</div>
+                    </div>
+                    <div class="analysis-card">
+                        <h4>Debt Ratio</h4>
+                        <div class="value">0%</div>
+                        <div class="status">Add data</div>
+                    </div>
+                `;
+            } else {
+                cardsHTML = `
+                    <div class="analysis-card ${analysis.metrics.wrongExpPercentage > 15 ? 'danger' : analysis.metrics.wrongExpPercentage > 5 ? 'warning' : 'good'}">
+                        <h4>Wrong Expenses</h4>
+                        <div class="value">${analysis.metrics.wrongExpPercentage.toFixed(1)}%</div>
+                        <div class="status">${analysis.metrics.wrongExpPercentage > 15 ? 'Too High' : analysis.metrics.wrongExpPercentage > 5 ? 'Moderate' : 'Good'}</div>
+                    </div>
+                    
+                    <div class="analysis-card ${analysis.metrics.investmentPercentage >= 30 ? 'good' : analysis.metrics.investmentPercentage >= 15 ? 'warning' : 'danger'}">
+                        <h4>Investments</h4>
+                        <div class="value">${analysis.metrics.investmentPercentage.toFixed(1)}%</div>
+                        <div class="status">${analysis.metrics.investmentPercentage >= 30 ? 'Excellent' : analysis.metrics.investmentPercentage >= 15 ? 'Moderate' : 'Low'}</div>
+                    </div>
+                    
+                    <div class="analysis-card ${analysis.metrics.emergencyFundPercentage >= 20 ? 'good' : analysis.metrics.emergencyFundPercentage >= 10 ? 'warning' : 'danger'}">
+                        <h4>Emergency Fund</h4>
+                        <div class="value">${analysis.metrics.emergencyFundPercentage.toFixed(1)}%</div>
+                        <div class="status">${analysis.metrics.emergencyFundPercentage >= 20 ? 'Strong' : analysis.metrics.emergencyFundPercentage >= 10 ? 'Moderate' : 'Weak'}</div>
+                    </div>
+                    
+                    <div class="analysis-card ${analysis.metrics.debtPercentage > 50 ? 'danger' : analysis.metrics.debtPercentage > 20 ? 'warning' : 'good'}">
+                        <h4>Debt Ratio</h4>
+                        <div class="value">${analysis.metrics.debtPercentage.toFixed(1)}%</div>
+                        <div class="status">${analysis.metrics.debtPercentage > 50 ? 'High Risk' : analysis.metrics.debtPercentage > 20 ? 'Moderate' : 'Good'}</div>
+                    </div>
+                `;
+            }
+            
+            analysisGrid.innerHTML = cardsHTML;
+            
+            // Update recommendations
+            const recommendationsList = document.getElementById('recommendationsList');
+            if (analysis.recommendations.length > 0) {
+                recommendationsList.innerHTML = analysis.recommendations.map(rec => `<li>${rec}</li>`).join('');
+            } else {
+                recommendationsList.innerHTML = '<li>Your finances look healthy! Keep maintaining good habits.</li>';
+            }
+        }
+
+        function getScoreMessage(score) {
+            if (score >= 90) return 'Excellent! Your finances are in great shape! 🎉';
+            if (score >= 75) return 'Very Good! You have healthy financial habits. 👍';
+            if (score >= 60) return 'Good! Some areas need attention. 💡';
+            if (score >= 40) return 'Fair! Focus on improving key areas. ⚠️';
+            return 'Needs Improvement! Take action to improve your finances. 🚨';
+        }
+
         // Show custom alert
         function showAlert(message, type = 'success') {
             const alertDiv = document.createElement('div');
@@ -1302,7 +1698,8 @@
                    financeData.fdBalance + 
                    financeData.investmentBalance +
                    financeData.rentBalance +
-                   financeData.miscBalance +
+                   financeData.wrongExpBalance +
+                   financeData.otherImpExpBalance +
                    financeData.loansGiven;
         }
 
@@ -1328,7 +1725,8 @@
                     'Fixed Deposit',
                     'Investments',
                     'Rent Balance',
-                    'Miscellaneous',
+                    'Wrong Expenditure',
+                    'Other Important Exp',
                     'Loans Given'
                 ],
                 datasets: [{
@@ -1338,7 +1736,8 @@
                         financeData.fdBalance,
                         financeData.investmentBalance,
                         financeData.rentBalance,
-                        financeData.miscBalance,
+                        financeData.wrongExpBalance,
+                        financeData.otherImpExpBalance,
                         financeData.loansGiven
                     ],
                     backgroundColor: [
@@ -1348,6 +1747,7 @@
                         '#8e44ad',
                         '#9b59b6',
                         '#e74c3c',
+                        '#95a5a6',
                         '#d35400'
                     ],
                     borderColor: '#ffffff',
@@ -1500,6 +1900,13 @@
                         
                         if (importedData.availableBalance !== undefined) {
                             if (confirm('This will replace your current data. Continue?')) {
+                                // Handle data migration for new fields
+                                if (importedData.wrongExpBalance === undefined) {
+                                    importedData.wrongExpBalance = 0;
+                                }
+                                if (importedData.otherImpExpBalance === undefined) {
+                                    importedData.otherImpExpBalance = 0;
+                                }
                                 if (importedData.loansGiven === undefined) {
                                     importedData.loansGiven = 0;
                                 }
@@ -1530,7 +1937,8 @@
                         familyBalance: 0,
                         repayAmount: 0,
                         rentBalance: 0,
-                        miscBalance: 0,
+                        wrongExpBalance: 0,
+                        otherImpExpBalance: 0,
                         fdBalance: 0,
                         investmentBalance: 0,
                         loansGiven: 0,
@@ -1547,12 +1955,20 @@
             const saved = localStorage.getItem('financeData');
             if (saved) {
                 financeData = JSON.parse(saved);
+                // Handle data migration for new fields
+                if (financeData.wrongExpBalance === undefined) {
+                    financeData.wrongExpBalance = 0;
+                }
+                if (financeData.otherImpExpBalance === undefined) {
+                    financeData.otherImpExpBalance = 0;
+                }
                 if (financeData.loansGiven === undefined) {
                     financeData.loansGiven = 0;
                 }
             }
             updateDisplay();
             updateChart();
+            updateAnalysis();
         }
 
         // Save data to localStorage
@@ -1560,6 +1976,7 @@
             localStorage.setItem('financeData', JSON.stringify(financeData));
             updateDisplay();
             updateChart();
+            updateAnalysis();
         }
 
         // Update display
@@ -1568,7 +1985,8 @@
             document.getElementById('familyBalance').textContent = formatCurrency(financeData.familyBalance);
             document.getElementById('repayAmount').textContent = formatCurrency(financeData.repayAmount);
             document.getElementById('rentBalance').textContent = formatCurrency(financeData.rentBalance);
-            document.getElementById('miscBalance').textContent = formatCurrency(financeData.miscBalance);
+            document.getElementById('wrongExpBalance').textContent = formatCurrency(financeData.wrongExpBalance);
+            document.getElementById('otherImpExpBalance').textContent = formatCurrency(financeData.otherImpExpBalance);
             document.getElementById('fdBalance').textContent = formatCurrency(financeData.fdBalance);
             document.getElementById('investmentBalance').textContent = formatCurrency(financeData.investmentBalance);
             document.getElementById('loansGivenBalance').textContent = formatCurrency(financeData.loansGiven);
@@ -1775,25 +2193,52 @@
             }
         }
 
-        // Add miscellaneous expense
-        function addMiscellaneous() {
-            const amount = parseFloat(document.getElementById('miscAmount').value);
-            const description = document.getElementById('miscDesc').value;
+        // Add Wrong Expenditure
+        function addWrongExpenditure() {
+            const amount = parseFloat(document.getElementById('wrongExpAmount').value);
+            const description = document.getElementById('wrongExpDesc').value;
             
             if (amount > 0) {
                 if (amount <= financeData.availableBalance) {
                     financeData.availableBalance -= amount;
-                    financeData.miscBalance += amount;
+                    financeData.wrongExpBalance += amount;
                     financeData.transactions.push({
-                        type: 'MISCELLANEOUS',
+                        type: 'WRONG_EXP',
                         amount: amount,
-                        description: description || 'Miscellaneous expense',
+                        description: description || 'Wrong expenditure',
                         date: new Date().toLocaleDateString(),
                         timestamp: new Date().toISOString()
                     });
                     saveData();
-                    hideModal('miscModal');
-                    showAlert(`✅ Successfully recorded ${formatCurrency(amount)} miscellaneous expense!`);
+                    hideModal('wrongExpModal');
+                    showAlert(`⚠️ Recorded ${formatCurrency(amount)} as wrong expenditure!`);
+                } else {
+                    showAlert('❌ Insufficient available balance!', 'error');
+                }
+            } else {
+                showAlert('❌ Please enter a valid amount', 'error');
+            }
+        }
+
+        // Add Other Important Expense
+        function addOtherImportantExpense() {
+            const amount = parseFloat(document.getElementById('otherImpExpAmount').value);
+            const description = document.getElementById('otherImpExpDesc').value;
+            
+            if (amount > 0) {
+                if (amount <= financeData.availableBalance) {
+                    financeData.availableBalance -= amount;
+                    financeData.otherImpExpBalance += amount;
+                    financeData.transactions.push({
+                        type: 'OTHER_IMP_EXP',
+                        amount: amount,
+                        description: description || 'Other important expense',
+                        date: new Date().toLocaleDateString(),
+                        timestamp: new Date().toISOString()
+                    });
+                    saveData();
+                    hideModal('otherImpExpModal');
+                    showAlert(`📝 Recorded ${formatCurrency(amount)} as other important expense!`);
                 } else {
                     showAlert('❌ Insufficient available balance!', 'error');
                 }
@@ -1958,8 +2403,9 @@
                 e.target.style.display = 'none';
             }
         });
+
+        // Initialize analysis when page loads
+        setTimeout(updateAnalysis, 100);
     </script>
 </body>
 </html>
-
-
